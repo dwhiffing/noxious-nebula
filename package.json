@@ -1,0 +1,33 @@
+{
+  "name": "js13k-2022",
+  "version": "1.0.0",
+  "author": "Daniel Whiffing <danielwhiffing@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "yarn clean; rollup --config rollup.config.js",
+    "build": "yarn clean; NODE_ENV=production rollup --config rollup.config.js",
+    "clean": "rm -rf dist; mkdir dist",
+    "postbuild": "node postbuild.js"
+  },
+  "dependencies": {
+    "kontra": "^8.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@types/node": "^14.6.0",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "archiver": "^5.3.1",
+    "esbuild": "^0.15.5",
+    "html-minifier": "^4.0.0",
+    "prettier": "^2.1.1",
+    "rollup": "^2.78.1",
+    "rollup-plugin-esbuild": "^4.9.3",
+    "rollup-plugin-html-bundle": "^0.0.3",
+    "rollup-plugin-kontra": "^1.0.1",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-serve": "^2.0.1",
+    "typescript": "^4.0.2"
+  }
+}
