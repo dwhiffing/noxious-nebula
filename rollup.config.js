@@ -15,7 +15,7 @@ export default {
     format: 'esm',
   },
   plugins: [
-    kontra({ gameObject: { velocity: true } }),
+    // kontra({ gameObject: { velocity: true } }),
     commonjs(),
     resolve(),
     esbuild({

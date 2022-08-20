@@ -1,25 +1,31 @@
-import { init, Sprite, GameLoop } from 'kontra'
+import { init, initPointer, initKeys, GameLoop } from 'kontra'
+import { GameScene, MenuScene, WinScene } from './scenes'
+import './zzfx'
 
-let { canvas } = init()
-let sprite = Sprite({
-  x: 100,
-  y: 80,
-  color: 'red',
-  width: 20,
-  height: 40,
-  dx: 2,
-})
+const { canvas } = init()
 
-let loop = GameLoop({
-  update: function () {
-    sprite.update()
-    if (sprite.x > canvas.width) {
-      sprite.x = -sprite.width
-    }
-  },
-  render: function () {
-    sprite.render()
-  },
-})
+initPointer()
+initKeys()
 
-loop.start()
+let scene
+
+const startGame = () => {
+  scene && scene.shutdown()
+  scene = GameScene({ canvas, onWin: startWin })
+}
+
+const startMenu = () => {
+  scene && scene.shutdown()
+  scene = MenuScene({ canvas, onNew: startGame })
+}
+
+const startWin = () => {
+  scene && scene.shutdown()
+  scene = WinScene({ canvas, onNew: startGame })
+}
+startMenu()
+
+GameLoop({
+  update: (...rest) => scene && scene.update(...rest),
+  render: (...rest) => scene && scene.render(...rest),
+}).start()
