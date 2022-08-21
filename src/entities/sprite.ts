@@ -30,7 +30,7 @@ export class Sprite extends SpriteClass {
 
 export class ShipSprite extends Sprite {
   constructor(properties) {
-    super(properties)
+    super({ anchor: { x: 0.5, y: 0.5 }, ...properties })
     this.strobeTimer = 10
   }
 
