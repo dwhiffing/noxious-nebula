@@ -5,17 +5,31 @@ import { Bullets } from '../entities/bullets'
 import { checkCollisions } from '../utils'
 import { Particles } from '../entities/particles'
 import { distance } from '../entities/enemy'
+import { Store } from '../entities/store'
 
 export const GameScene = ({ canvas, onWin }) => {
   let scene = Scene({ id: 'game' })
   let bullets = Bullets({ scene })
   let particles = Particles({ scene })
-  let player = Player({ scene, x: 300, y: 300, bullets })
+
+  const nextWave = () => {
+    player.sprite.health = 100
+    enemies.spawn(300, 100, player.sprite)
+  }
+  let store = Store({ scene, onNext: nextWave })
+  let player = Player({ scene, x: 300, y: 300, bullets, store })
   let enemies = Enemies({ scene, particles })
   scene.add(player.sprite)
-  enemies.spawn(300, 100, player.sprite)
+  const checkEnd = () => {
+    setTimeout(() => {
+      if (enemies.pool.getAliveObjects().length !== 0) return
+      store.setActive(true)
+    }, 500)
+  }
 
+  nextWave()
   return {
+    nextWave,
     shutdown() {
       enemies.pool.clear()
       bullets.pool.clear()
@@ -26,6 +40,7 @@ export const GameScene = ({ canvas, onWin }) => {
       enemies.pool.update()
       bullets.pool.update()
       particles.pool.update()
+      store.update()
       checkCollisions(
         bullets.pool.getAliveObjects(),
         enemies.pool.getAliveObjects(),
@@ -39,6 +54,7 @@ export const GameScene = ({ canvas, onWin }) => {
               .getAliveObjects()
               .filter((e) => distance(e, bullet) < 50)
               .forEach((e: any) => e.die())
+            checkEnd()
           }, 500)
         },
       )
@@ -49,6 +65,8 @@ export const GameScene = ({ canvas, onWin }) => {
           if (!player.isAlive()) return
           enemy.die()
           player.damage(10)
+          checkEnd()
+
           if (!player.isAlive()) onWin()
         },
       )
@@ -58,6 +76,7 @@ export const GameScene = ({ canvas, onWin }) => {
       particles.pool.render()
       enemies.pool.render()
       bullets.pool.render()
+      store.render()
     },
   }
 }

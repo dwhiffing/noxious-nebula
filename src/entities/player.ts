@@ -1,7 +1,7 @@
 import { onPointer } from 'kontra'
 import { ShipSprite } from './sprite'
 
-export const Player = ({ scene, x: originX, y: originY, bullets }) => {
+export const Player = ({ scene, x: originX, y: originY, bullets, store }) => {
   const canvas = scene.context.canvas
   let sprite = new ShipSprite({
     x: originX,
@@ -13,6 +13,7 @@ export const Player = ({ scene, x: originX, y: originY, bullets }) => {
   sprite.health = 100
 
   onPointer('down', () => {
+    if (store.getActive()) return
     if (canvas !== document.pointerLockElement) {
       canvas.requestPointerLock()
     } else {
