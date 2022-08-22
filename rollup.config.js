@@ -5,6 +5,7 @@ import html from 'rollup-plugin-html-bundle'
 import serve from 'rollup-plugin-serve'
 import livereload from 'rollup-plugin-livereload'
 import kontra from 'rollup-plugin-kontra'
+import { terser } from 'rollup-plugin-terser'
 
 const prod = process.env.NODE_ENV === 'production'
 
@@ -15,14 +16,19 @@ export default {
     format: 'esm',
   },
   plugins: [
-    // kontra({ gameObject: { velocity: true } }),
+    kontra({
+      gameObject: { velocity: true, anchor: true, group: true, ttl: true },
+      sprite: { animation: false },
+      text: { textAlign: true },
+      vector: {},
+    }),
     commonjs(),
     resolve(),
     esbuild({
       include: /\.[jt]s$/,
       tsconfig: 'tsconfig.json',
-      minify: prod,
     }),
+    prod && terser(),
     html({
       template: 'src/index.html',
       target: 'dist/index.html',
