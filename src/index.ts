@@ -1,11 +1,10 @@
-import { init, initPointer, initKeys, GameLoop } from 'kontra'
+import { init, initPointer, GameLoop } from 'kontra'
 import { GameScene, MenuScene, WinScene } from './scenes'
 import './zzfx'
 
 const { canvas } = init()
 
 initPointer()
-initKeys()
 
 let scene
 
