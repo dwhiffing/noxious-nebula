@@ -3,12 +3,14 @@ import { Enemies } from '../entities/enemies'
 import { Player } from '../entities/player'
 import { Bullets } from '../entities/bullets'
 import { checkCollisions } from '../utils'
+import { Particles } from '../entities/particles'
 
 export const GameScene = ({ canvas, onWin }) => {
   let scene = Scene({ id: 'game' })
   let bullets = Bullets({ scene })
+  let particles = Particles({ scene })
   let player = Player({ scene, x: 300, y: 300, bullets })
-  let enemies = Enemies({ scene })
+  let enemies = Enemies({ scene, particles })
   scene.add(player.sprite)
   enemies.spawn(300, 100, player.sprite)
 
@@ -20,7 +22,9 @@ export const GameScene = ({ canvas, onWin }) => {
     },
     update() {
       scene.update()
-
+      enemies.pool.update()
+      bullets.pool.update()
+      particles.pool.update()
       checkCollisions(
         bullets.pool.getAliveObjects(),
         enemies.pool.getAliveObjects(),
@@ -31,6 +35,9 @@ export const GameScene = ({ canvas, onWin }) => {
     },
     render() {
       scene.render()
+      particles.pool.render()
+      enemies.pool.render()
+      bullets.pool.render()
     },
   }
 }

@@ -14,7 +14,7 @@ export const Bullets = ({ scene }) => {
       const { size = 5, speed = 0, count = 1, spread = 0, index = 0 } = opts
       const offset = index * spread - spread * (count / 2)
       const angle = target ? angleToTarget(start, target) - 1.57 + offset : 0
-      const bullet = pool.get({
+      pool.get({
         x,
         y,
         anchor: { x: 0.5, y: 0.5 },
@@ -24,9 +24,6 @@ export const Bullets = ({ scene }) => {
         dy: speed * Math.sin(angle),
         ttl: Infinity,
       })
-      if (bullet && !scene.objects.includes(bullet)) {
-        scene.add(bullet)
-      }
     },
   }
 }

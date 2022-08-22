@@ -16,11 +16,11 @@ export class Sprite extends SpriteClass {
 
   die() {
     this.ttl = 0
+    this.opacity = this.isAlive() ? 1 : 0
   }
 
   update() {
     super.update()
-    this.opacity = this.isAlive() ? 1 : 0
   }
 
   render() {
@@ -31,24 +31,24 @@ export class Sprite extends SpriteClass {
 export class ShipSprite extends Sprite {
   constructor(properties) {
     super({ anchor: { x: 0.5, y: 0.5 }, ...properties })
-    this.strobeTimer = 10
+    // this.strobeTimer = 10
   }
 
   draw() {
     this.strobeTimer--
     const w = this.width * 0.6
-    const pad = 1.25 + (this.strobeTimer <= 5 ? 0.08 : 0.05)
-    if (this.strobeTimer <= 0) this.strobeTimer = 10
+    // const pad = 1.25 + (this.strobeTimer <= 5 ? 0.08 : 0.05)
+    // if (this.strobeTimer <= 0) this.strobeTimer = 10
     const o = this.width / 2
-    gradient({
-      x: o + -w * pad,
-      y: o + -w * pad,
-      ctx: this.context,
-      r1: w * 0.5,
-      r2: w * pad,
-      c1: 'rgba(170,170,255,1)',
-      c2: 'rgba(170,170,255,0)',
-    })
+    // gradient({
+    //   x: o + -w * pad,
+    //   y: o + -w * pad,
+    //   ctx: this.context,
+    //   r1: w * 0.5,
+    //   r2: w * pad,
+    //   c1: 'rgba(170,170,255,1)',
+    //   c2: 'rgba(170,170,255,0)',
+    // })
     this.context.fillStyle = this.color
     this.context.lineWidth = 3
     this.context.strokeStyle = '#222'

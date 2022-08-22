@@ -2,6 +2,7 @@ import { movePoint, angleToTarget } from 'kontra'
 import { ShipSprite } from './sprite'
 
 const speed = 0.5
+const size = 20
 const maxSpeed = 4
 const turnRate = 0.08
 
@@ -11,20 +12,24 @@ export class Enemy extends ShipSprite {
   }
 
   init(properties) {
-    super.init({ color: '#f00', width: 20, height: 20, ...properties })
+    super.init({ color: '#f00', width: size, height: size, ...properties })
     this.target = properties.target
     this.pool = properties.pool
+    this.particles = properties.particles
+    this.angle = 0
+    // particle timer
+    this._p = 0
   }
 
   move(target) {
     // rotate toward target
     let angle = angleToTarget(this, target)
-    const rDelta = wrapNumber(angle - this.rotation, -Math.PI, Math.PI)
-    this.rotation += rDelta > 0 ? turnRate : -turnRate
-    if (Math.abs(rDelta) < turnRate) this.rotation = angle
+    const rDelta = wrapNumber(angle - this.angle, -Math.PI, Math.PI)
+    this.angle += rDelta > 0 ? turnRate : -turnRate
+    if (Math.abs(rDelta) < turnRate) this.angle = angle
 
     // move toward facing angle
-    const pos = movePoint({ x: this.dx, y: this.dy }, this.rotation, speed)
+    const pos = movePoint({ x: this.dx, y: this.dy }, this.angle, speed)
     this.dx += pos.x
     this.dy += pos.y
 
@@ -42,8 +47,12 @@ export class Enemy extends ShipSprite {
   }
 
   update() {
-    if (this.target) this.move(this.target)
     super.update()
+    if (this.target) this.move(this.target)
+    if (this._p-- < 1) {
+      this._p = 4
+      this.particles.spawn(this.x + size / 2, this.y + size / 2)
+    }
   }
 }
 
