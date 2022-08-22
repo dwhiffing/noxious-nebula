@@ -1,4 +1,4 @@
-import { Button, Text } from 'kontra'
+import { Text, track } from 'kontra'
 
 export const MenuScene = ({ canvas, onNew }) => {
   const width = canvas.clientWidth
@@ -19,23 +19,19 @@ export const MenuScene = ({ canvas, onNew }) => {
     y: height / 2 - 120,
     anchor: { x: 0.5, y: 0.5 },
   })
-  let button = Button({
+  let button = Text({
     x: width / 2,
     y: height / 2 + 150,
-    text: {
-      text: 'Start',
-      color: 'white',
-      font: '40px sans-serif',
-      anchor: { x: 0.5, y: 0.5 },
-    },
-    onDown() {
-      onNew()
-    },
+    text: 'Start',
+    color: 'white',
+    font: '40px sans-serif',
+    anchor: { x: 0.5, y: 0.5 },
+    onDown: onNew,
   })
+  track(button)
+
   return {
-    shutdown() {
-      button.destroy()
-    },
+    shutdown() {},
     update() {},
     render() {
       text.render()

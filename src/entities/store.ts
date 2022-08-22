@@ -1,4 +1,4 @@
-import { Button, Sprite } from 'kontra'
+import { Text, Sprite, track } from 'kontra'
 
 export const Store = ({ canvas, onNext }) => {
   let active = false
@@ -11,38 +11,34 @@ export const Store = ({ canvas, onNext }) => {
   })
   let buttons = []
   for (let i = 0; i < 8; i++) {
-    buttons.push(
-      Button({
-        x: 100 + 55 * i,
-        y: 200,
-        text: {
-          text: 'Upgrade',
-          color: 'white',
-          font: '12px sans-serif',
-          anchor: { x: 0.5, y: 0.5 },
-        },
-        onDown() {},
-      }),
-    )
+    const text = Text({
+      x: 100 + 55 * i,
+      y: 200,
+      text: 'Upgrade',
+      color: 'white',
+      font: '12px sans-serif',
+      anchor: { x: 0.5, y: 0.5 },
+      onDown() {},
+    })
+    track(text)
+    buttons.push(text)
   }
 
-  buttons.push(
-    Button({
-      x: 300,
-      y: 400,
-      text: {
-        text: 'Start',
-        color: 'white',
-        font: '12px sans-serif',
-        anchor: { x: 0.5, y: 0.5 },
-      },
-      onDown() {
-        active = false
-        canvas.requestPointerLock()
-        onNext()
-      },
-    }),
-  )
+  const text = Text({
+    x: 300,
+    y: 400,
+    text: 'Start',
+    color: 'white',
+    font: '12px sans-serif',
+    anchor: { x: 0.5, y: 0.5 },
+    onDown() {
+      active = false
+      canvas.requestPointerLock()
+      onNext()
+    },
+  })
+  track(text)
+  buttons.push(text)
 
   return {
     update() {
