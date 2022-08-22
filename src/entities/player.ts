@@ -1,8 +1,7 @@
 import { onPointer } from 'kontra'
 import { ShipSprite } from './sprite'
 
-export const Player = ({ scene, x: originX, y: originY, bullets, store }) => {
-  const canvas = scene.context.canvas
+export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
   let sprite = new ShipSprite({
     x: originX,
     y: originY,
@@ -47,11 +46,6 @@ export const Player = ({ scene, x: originX, y: originY, bullets, store }) => {
     },
     shutdown() {
       document.removeEventListener('pointerlockchange', changeCallback, false)
-    },
-    update() {
-      sprite.ddx = 0
-      sprite.ddy = 0
-      sprite.update()
     },
   }
 }

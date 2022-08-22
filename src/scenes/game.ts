@@ -1,4 +1,3 @@
-import { Scene } from 'kontra'
 import { Enemies } from '../entities/enemies'
 import { Player } from '../entities/player'
 import { Bullets } from '../entities/bullets'
@@ -8,18 +7,16 @@ import { distance } from '../entities/enemy'
 import { Store } from '../entities/store'
 
 export const GameScene = ({ canvas, onWin }) => {
-  let scene = Scene({ id: 'game' })
-  let bullets = Bullets({ scene })
-  let particles = Particles({ scene })
+  let bullets = Bullets()
+  let particles = Particles()
 
   const nextWave = () => {
     player.sprite.health = 100
     enemies.spawn(300, 100, player.sprite)
   }
-  let store = Store({ scene, onNext: nextWave })
-  let player = Player({ scene, x: 300, y: 300, bullets, store })
-  let enemies = Enemies({ scene, particles })
-  scene.add(player.sprite)
+  let store = Store({ canvas, onNext: nextWave })
+  let player = Player({ canvas, x: 300, y: 300, bullets, store })
+  let enemies = Enemies({ particles })
   const checkEnd = () => {
     setTimeout(() => {
       if (enemies.pool.getAliveObjects().length !== 0) return
@@ -36,7 +33,7 @@ export const GameScene = ({ canvas, onWin }) => {
       player.shutdown()
     },
     update() {
-      scene.update()
+      player.sprite.update()
       enemies.pool.update()
       bullets.pool.update()
       particles.pool.update()
@@ -72,7 +69,7 @@ export const GameScene = ({ canvas, onWin }) => {
       )
     },
     render() {
-      scene.render()
+      player.sprite.render()
       particles.pool.render()
       enemies.pool.render()
       bullets.pool.render()

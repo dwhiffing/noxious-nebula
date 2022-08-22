@@ -2,7 +2,7 @@ import { Pool } from 'kontra'
 import { gradient } from '../utils'
 import { Sprite } from './sprite'
 
-export const Particles = ({ scene }) => {
+export const Particles = () => {
   let pool = Pool({ create: () => new Circle(), maxSize: 100 })
   return {
     pool,

@@ -1,6 +1,6 @@
 import { Button, Sprite } from 'kontra'
 
-export const Store = ({ scene, onNext }) => {
+export const Store = ({ canvas, onNext }) => {
   let active = false
   const background = Sprite({
     x: 50,
@@ -38,7 +38,7 @@ export const Store = ({ scene, onNext }) => {
       },
       onDown() {
         active = false
-        scene.context.canvas.requestPointerLock()
+        canvas.requestPointerLock()
         onNext()
       },
     }),

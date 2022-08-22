@@ -1,7 +1,7 @@
 import { Enemy } from './enemy'
 import { Pool } from 'kontra'
 
-export const Enemies = ({ scene, particles }) => {
+export const Enemies = ({ particles }) => {
   let pool = Pool({ create: () => new Enemy(), maxSize: 40 })
   return {
     pool,

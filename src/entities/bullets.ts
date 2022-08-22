@@ -2,7 +2,7 @@ import { angleToTarget, Pool } from 'kontra'
 import { gradient } from '../utils'
 import { Sprite } from './sprite'
 
-export const Bullets = ({ scene }) => {
+export const Bullets = () => {
   let pool = Pool({
     create: () => new Circle(),
     maxSize: 50,
