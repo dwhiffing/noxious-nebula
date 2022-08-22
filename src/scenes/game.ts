@@ -4,6 +4,7 @@ import { Player } from '../entities/player'
 import { Bullets } from '../entities/bullets'
 import { checkCollisions } from '../utils'
 import { Particles } from '../entities/particles'
+import { distance } from '../entities/enemy'
 
 export const GameScene = ({ canvas, onWin }) => {
   let scene = Scene({ id: 'game' })
@@ -29,7 +30,26 @@ export const GameScene = ({ canvas, onWin }) => {
         bullets.pool.getAliveObjects(),
         enemies.pool.getAliveObjects(),
         (bullet, enemy) => {
-          bullet.ttl = 0
+          if (bullet.triggered) return
+          bullet.triggered = true
+          setTimeout(() => {
+            // make bullet create explosion and damage enemies within range of center instead
+            bullet.die()
+            enemies.pool
+              .getAliveObjects()
+              .filter((e) => distance(e, bullet) < 50)
+              .forEach((e: any) => e.die())
+          }, 500)
+        },
+      )
+      checkCollisions(
+        [player.sprite],
+        enemies.pool.getAliveObjects(),
+        (player, enemy) => {
+          if (!player.isAlive()) return
+          enemy.die()
+          player.damage(10)
+          if (!player.isAlive()) onWin()
         },
       )
     },

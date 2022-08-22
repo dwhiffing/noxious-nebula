@@ -62,5 +62,5 @@ const wrapNumber = (n, min, max) => {
   return n
 }
 
-const distance = (a, b) =>
+export const distance = (a, b) =>
   Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y))

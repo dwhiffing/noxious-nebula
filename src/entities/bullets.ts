@@ -18,11 +18,12 @@ export const Bullets = ({ scene }) => {
         x,
         y,
         anchor: { x: 0.5, y: 0.5 },
-        width: size,
-        height: size,
+        width: 80,
+        height: 80,
         dx: speed * Math.cos(angle),
         dy: speed * Math.sin(angle),
         ttl: Infinity,
+        triggered: false,
       })
     },
   }
@@ -31,20 +32,17 @@ export const Bullets = ({ scene }) => {
 export class Circle extends Sprite {
   constructor(properties = {}) {
     super(properties)
-    this.r = this.r || '255'
-    this.g = this.g || '255'
-    this.b = this.b || '255'
   }
 
   draw() {
     gradient({
-      x: 0 + -this.width * 1.2,
-      y: 0 + -this.width * 1.2,
+      x: 40,
+      y: 40,
       ctx: this.context,
-      r1: this.width / 2,
-      r2: this.width * 1.2,
-      c1: `rgba(${this.r},${this.g},${this.b},1)`,
-      c2: `rgba(${this.r},${this.g},${this.b},0)`,
+      r1: 5,
+      r2: 8,
+      c1: `rgba(255,255,255,1)`,
+      c2: `rgba(255,255,255,0)`,
     })
   }
 }

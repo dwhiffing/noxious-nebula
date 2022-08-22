@@ -10,6 +10,7 @@ export const Player = ({ scene, x: originX, y: originY, bullets }) => {
     width: 50,
     height: 50,
   })
+  sprite.health = 100
 
   onPointer('down', () => {
     if (canvas !== document.pointerLockElement) {
@@ -36,6 +37,13 @@ export const Player = ({ scene, x: originX, y: originY, bullets }) => {
 
   return {
     sprite,
+
+    damage() {
+      sprite.health -= 10
+      if (sprite.health <= 0) {
+        sprite.die()
+      }
+    },
     shutdown() {
       document.removeEventListener('pointerlockchange', changeCallback, false)
     },

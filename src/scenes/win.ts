@@ -3,7 +3,7 @@ import { Button, Text } from 'kontra'
 export const WinScene = ({ canvas, onNew }) => {
   const { width, height } = canvas
   let text = Text({
-    text: 'You win!',
+    text: 'Game over!',
     font: '110px sans-serif',
     color: '#555',
     x: width / 2,
