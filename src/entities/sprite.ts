@@ -1,5 +1,4 @@
-import { SpriteClass } from 'kontra'
-import { gradient } from '../utils'
+import { movePoint, SpriteClass } from 'kontra'
 
 export class Sprite extends SpriteClass {
   constructor(properties) {
@@ -63,6 +62,20 @@ export class ShipSprite extends Sprite {
     this.context.fill()
     this.context.lineWidth = 1
     this.context.strokeStyle = '#555'
+    this.context.stroke()
+    this.context.closePath()
+
+    // debug line
+    this.context.strokeStyle = '#0f0'
+
+    const p = movePoint(
+      { x: this.width / 2, y: this.width / 2 },
+      this.angle || 0,
+      10,
+    )
+    this.context.beginPath()
+    this.context.moveTo(this.width / 2, this.width / 2)
+    this.context.lineTo(p.x, p.y)
     this.context.stroke()
   }
 }
