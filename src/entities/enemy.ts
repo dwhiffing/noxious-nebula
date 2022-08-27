@@ -1,9 +1,9 @@
 import { movePoint, angleToTarget } from 'kontra'
 import { ShipSprite } from './sprite'
 
-const speed = 0.5
 const size = 10
-const maxSpeed = 4
+const maxSpeed = 3.8
+const speed = 0.8
 const turnRate = 0.08
 
 export class Enemy extends ShipSprite {
@@ -25,25 +25,30 @@ export class Enemy extends ShipSprite {
     // rotate toward target
     let angle = angleToTarget(this, target)
     const rDelta = wrapNumber(angle - this.angle, -Math.PI, Math.PI)
-    this.angle += rDelta > 0 ? turnRate : -turnRate
-    if (Math.abs(rDelta) < turnRate) this.angle = angle
+    if (Math.abs(rDelta) < turnRate) {
+      this.angle = angle
+    } else {
+      this.angle += rDelta > 0 ? turnRate : -turnRate
+    }
+    this.angle = wrapNumber(this.angle, -Math.PI, Math.PI)
 
     // move toward facing angle
-    const pos = movePoint({ x: this.dx, y: this.dy }, this.angle, speed)
-    this.dx += pos.x
-    this.dy += pos.y
+    const pos = movePoint(this.position, this.angle, speed)
+    this.dx += pos.x - this.position.x
+    this.dy += pos.y - this.position.y
 
     // separate from others
     this.pool.getAliveObjects().forEach((otherEnemy: any) => {
-      if (otherEnemy === this || distance(this, otherEnemy) > 50) return
+      if (otherEnemy === this || distance(this, otherEnemy) > 30) return
       this.dx += (this.x - otherEnemy.x) * 0.01
       this.dy += (this.y - otherEnemy.y) * 0.01
     })
 
     // enforce max speed
+    let _maxSpeed = maxSpeed * (1 - Math.abs(rDelta) / Math.PI)
     const _speed = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
-    this.dx = (this.dx / _speed) * maxSpeed
-    this.dy = (this.dy / _speed) * maxSpeed
+    this.dx = (this.dx / _speed) * _maxSpeed
+    this.dy = (this.dy / _speed) * _maxSpeed
   }
 
   update() {
