@@ -2,7 +2,7 @@ import { movePoint, angleToTarget } from 'kontra'
 import { ShipSprite } from './sprite'
 
 const speed = 0.5
-const size = 20
+const size = 10
 const maxSpeed = 4
 const turnRate = 0.08
 
@@ -50,7 +50,7 @@ export class Enemy extends ShipSprite {
     super.update()
     if (this.target) this.move(this.target)
     if (this._p-- < 1) {
-      this._p = 4
+      this._p = 2
       this.particles.spawn(this.x + size / 2, this.y + size / 2)
     }
   }

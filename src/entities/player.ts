@@ -6,8 +6,8 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
     x: originX,
     y: originY,
     color: '#666',
-    width: 50,
-    height: 50,
+    width: 25,
+    height: 25,
   })
   sprite.health = 100
 
