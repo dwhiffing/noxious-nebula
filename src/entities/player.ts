@@ -16,7 +16,7 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
     if (canvas !== document.pointerLockElement) {
       canvas.requestPointerLock()
     } else {
-      bullets.spawn({ x: sprite.x, y: sprite.y }, { x: 10, y: 10 })
+      bullets.spawn({ x: sprite.x, y: sprite.y })
     }
   })
 

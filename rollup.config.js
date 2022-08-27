@@ -20,7 +20,7 @@ export default {
       gameObject: { velocity: true, anchor: true, group: true, ttl: true },
       sprite: { animation: false },
       text: { textAlign: true },
-      vector: {},
+      vector: { add: true, dot: true, distance: true },
     }),
     commonjs(),
     resolve(),

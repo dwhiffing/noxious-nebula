@@ -24,6 +24,28 @@ export const GameScene = ({ canvas, onWin }) => {
     }, 500)
   }
 
+  const playerEnemyCollide = (p, e) => {
+    if (!p.isAlive()) return
+    e.die()
+    p.damage(10)
+    checkEnd()
+
+    if (!p.isAlive()) onWin()
+  }
+
+  const bulletEnemyCollide = (b, e) => {
+    if (b.triggered || b.position.distance(player.sprite.position) < 100) return
+    b.triggered = true
+    setTimeout(() => {
+      b.die()
+      enemies.pool
+        .getAliveObjects()
+        .filter((e) => distance(e, b) < b.explodeRadius)
+        .forEach((e: any) => e.die())
+      checkEnd()
+    }, b.triggerDuration)
+  }
+
   nextWave()
   return {
     nextWave,
@@ -41,31 +63,12 @@ export const GameScene = ({ canvas, onWin }) => {
       checkCollisions(
         bullets.pool.getAliveObjects(),
         enemies.pool.getAliveObjects(),
-        (bullet, enemy) => {
-          if (bullet.triggered) return
-          bullet.triggered = true
-          setTimeout(() => {
-            // make bullet create explosion and damage enemies within range of center instead
-            bullet.die()
-            enemies.pool
-              .getAliveObjects()
-              .filter((e) => distance(e, bullet) < 50)
-              .forEach((e: any) => e.die())
-            checkEnd()
-          }, 500)
-        },
+        bulletEnemyCollide,
       )
       checkCollisions(
         [player.sprite],
         enemies.pool.getAliveObjects(),
-        (player, enemy) => {
-          if (!player.isAlive()) return
-          enemy.die()
-          player.damage(10)
-          checkEnd()
-
-          if (!player.isAlive()) onWin()
-        },
+        playerEnemyCollide,
       )
     },
     render() {
