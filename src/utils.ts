@@ -44,3 +44,14 @@ export function gradient({ x = 0, y = 0, ctx, r2, r1, c1, c2 }) {
   ctx.fillStyle = g
   ctx.fill()
 }
+
+export const wrapNumber = (n, min, max) => {
+  if (n > max) return n - max * 2
+  if (n < min) return n + Math.abs(min) * 2
+  return n
+}
+
+export const getSpeed = (x, y) => Math.sqrt(x * x + y * y)
+
+export const distance = (a, b) =>
+  Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y))

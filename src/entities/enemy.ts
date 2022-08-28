@@ -1,10 +1,10 @@
 import { movePoint, angleToTarget } from 'kontra'
+import { distance, getSpeed, wrapNumber } from '../utils'
+import { ENEMY_STATS } from '../constants'
 import { ShipSprite } from './sprite'
 
-const size = 10
-const maxSpeed = 3.8
-const speed = 0.8
-const turnRate = 0.08
+const SEP_AMOUNT = 30
+const SEP_FACTOR = 0.01
 
 export class Enemy extends ShipSprite {
   constructor(properties = {}) {
@@ -12,21 +12,26 @@ export class Enemy extends ShipSprite {
   }
 
   init(properties) {
-    super.init({ color: '#f00', width: size, height: size, ...properties })
+    const stats = ENEMY_STATS[properties.type || 'base']
+    super.init({
+      color: stats.color,
+      width: stats.size,
+      height: stats.size,
+      ...stats,
+      ...properties,
+    })
     this.target = properties.target
-    // set a random duration for each enemy
-    // when the duration is reached, stop updating targetPos, sleep for a random duration
-    // then wake up
+    // TODO: set a random duration for each enemy, when the duration is reached, stop updating targetPos, sleep for a random duration. then wake up
     this.targetPos = this.target ? { x: this.target.x, y: this.target.y } : null
     this.pool = properties.pool
     this.particles = properties.particles
     this.angle = 0
-
-    // particle timer
-    this._p = 0
+    this.exhaustTimer = 0
   }
 
   move(target) {
+    const { maxSpeed, speed, turnRate } = ENEMY_STATS[this.type]
+
     // rotate toward target
     let angle = angleToTarget(this, target)
     const rDelta = wrapNumber(angle - this.angle, -Math.PI, Math.PI)
@@ -44,9 +49,9 @@ export class Enemy extends ShipSprite {
 
     // separate from others
     this.pool.getAliveObjects().forEach((otherEnemy: any) => {
-      if (otherEnemy === this || distance(this, otherEnemy) > 30) return
-      this.dx += (this.x - otherEnemy.x) * 0.01
-      this.dy += (this.y - otherEnemy.y) * 0.01
+      if (otherEnemy === this || distance(this, otherEnemy) > SEP_AMOUNT) return
+      this.dx += (this.x - otherEnemy.x) * SEP_FACTOR
+      this.dy += (this.y - otherEnemy.y) * SEP_FACTOR
     })
 
     // enforce max speed
@@ -58,33 +63,34 @@ export class Enemy extends ShipSprite {
 
   update() {
     super.update()
+
     this.targetPos = this.target ? { x: this.target.x, y: this.target.y } : null
     if (this.targetPos) this.move(this.targetPos)
-    if (this._p-- < 1) {
-      this._p = 2
-      this.particles.spawn({ x: this.x + size / 2, y: this.y + size / 2 })
+
+    // draw exhaust
+    if (this.exhaustTimer-- < 1) {
+      const size = ENEMY_STATS[this.type || 'base'].size
+      this.exhaustTimer = Math.floor(size / 10)
+      this.particles.spawn({
+        x: this.x + size / 2,
+        y: this.y + size / 2,
+        size: size / 3,
+        ttl: 10 + Math.floor(size / 1.2),
+        opacity: 0.5,
+      })
     }
   }
 
   die() {
+    const size = ENEMY_STATS[this.type || 'base'].size
+
+    // draw explosion
     this.particles.spawn({
       x: this.x + size / 2,
       y: this.y + size / 2,
-      size: 12,
-      opacity: 1,
+      size,
       ttl: 20,
     })
     super.die()
   }
 }
-
-const wrapNumber = (n, min, max) => {
-  if (n > max) return n - max * 2
-  if (n < min) return n + Math.abs(min) * 2
-  return n
-}
-
-export const getSpeed = (x, y) => Math.sqrt(x * x + y * y)
-
-export const distance = (a, b) =>
-  Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y))

@@ -2,44 +2,33 @@ import { Pool } from 'kontra'
 import { gradient } from '../utils'
 import { Sprite } from './sprite'
 
+const MAX_BULLETS = 50
+
 export const Bullets = () => {
-  let pool = Pool({
-    create: () => new Bullet(),
-    maxSize: 50,
-  })
+  let pool = Pool({ create: () => new Bullet(), maxSize: MAX_BULLETS })
   return {
     pool,
-    spawn({
-      x,
-      y,
-      angle = 0,
-      speed = 0,
-      triggerRadius = 0,
-      triggerDuration = 0,
-      explodeRadius = 0,
-      size = 0,
-      ttl = Infinity,
-    }) {
+    spawn(opts) {
+      const { speed = 0, angle = 0 } = opts
       pool.get({
-        x,
-        y,
+        x: opts.x,
+        y: opts.y,
         anchor: { x: 0.5, y: 0.5 },
-        width: triggerRadius,
-        height: triggerRadius,
+        width: opts.triggerRadius || opts.size || 0,
+        height: opts.triggerRadius || opts.size || 0,
         dx: speed * Math.cos(angle),
         dy: speed * Math.sin(angle),
-        size,
-        explodeRadius,
-        triggerDuration,
-        ttl,
+        size: opts.size || 0,
+        explodeRadius: opts.explodeRadius || 0,
+        triggerDuration: opts.triggerDuration || 0,
+        ttl: opts.ttl || Infinity,
         triggered: false,
-        exploded: false,
       })
     },
   }
 }
 
-export class Bullet extends Sprite {
+class Bullet extends Sprite {
   constructor(properties = {}) {
     super(properties)
   }
@@ -48,6 +37,7 @@ export class Bullet extends Sprite {
     super.init(props)
     this.opacity = 1
   }
+
   draw() {
     if (this.ttl) this.opacity -= 1 / this.ttl
     const size = this.size

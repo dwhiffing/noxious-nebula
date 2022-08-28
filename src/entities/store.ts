@@ -3,16 +3,16 @@ import { Text, Sprite, track } from 'kontra'
 export const Store = ({ canvas, onNext }) => {
   let active = false
   const background = Sprite({
-    x: 50,
+    x: canvas.width / 2 - 250,
     y: 50,
     width: 500,
-    height: 500,
+    height: 400,
     color: '#555',
   })
   let buttons = []
   for (let i = 0; i < 8; i++) {
     const text = Text({
-      x: 100 + 55 * i,
+      x: canvas.width / 2 - 200 + 55 * i,
       y: 200,
       text: 'Upgrade',
       color: 'white',
@@ -25,7 +25,7 @@ export const Store = ({ canvas, onNext }) => {
   }
 
   const text = Text({
-    x: 300,
+    x: canvas.width / 2,
     y: 400,
     text: 'Start',
     color: 'white',

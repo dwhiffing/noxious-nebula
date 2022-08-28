@@ -3,23 +3,23 @@ import { gradient } from '../utils'
 import { Sprite } from './sprite'
 
 export const Particles = () => {
-  let pool = Pool({ create: () => new Circle(), maxSize: 100 })
+  let pool = Pool({ create: () => new Particle(), maxSize: 200 })
   return {
     pool,
-    spawn({ x, y, size = 3, ttl = 15, opacity = 0.4 }) {
-      pool.get({ x, y, width: size, ttl, opacity })
+    spawn({ x, y, size = 1, ttl = 50, opacity = 1 }) {
+      pool.get({ x, y, width: size, ttl, opacity, initialOpacity: opacity })
     },
   }
 }
 
-class Circle extends Sprite {
+class Particle extends Sprite {
   constructor(properties = {}) {
     super({ ...properties })
   }
 
   update() {
     super.update()
-    this.opacity -= 1 / this.ttl
+    this.opacity -= this.initialOpacity / this.ttl
   }
 
   draw() {

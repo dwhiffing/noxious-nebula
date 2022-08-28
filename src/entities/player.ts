@@ -1,27 +1,10 @@
 import { angleToTarget, onPointer } from 'kontra'
-import { getSpeed } from './enemy'
+import { BULLET_STATS, PLAYER_STATS } from '../constants'
+import { getSpeed } from '../utils'
 import { ShipSprite } from './sprite'
 
-const PLAYER_SPEED = 4
-const BULLET_STATS = {
-  mine: {
-    size: 3,
-    triggerRadius: 45,
-    triggerDuration: 300,
-    explodeRadius: 35,
-  },
-  shot: {
-    triggerRadius: 45,
-    angle: ({ sprite }) => sprite.angle - 1.57,
-    speed: ({ sprite }) => sprite.speed / 2,
-    size: ({ dur }) => dur / 250,
-  },
-  blast: {
-    triggerRadius: 45,
-    ttl: 50,
-    size: ({ dur }) => dur / 50,
-  },
-}
+const MINE_CLICK_DURATION = 250
+const BLAST_SPEED_THRESHOLD = 0.2
 export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
   let sprite = new ShipSprite({
     x: originX,
@@ -32,6 +15,8 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
   })
   sprite.health = 100
   let downDur = 0
+  const { speed, maxCharge } = PLAYER_STATS
+  const _dur = MINE_CLICK_DURATION
   onPointer('down', (e) => (downDur = e.timeStamp))
 
   onPointer('up', (e) => {
@@ -39,16 +24,9 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
     if (canvas !== document.pointerLockElement) {
       return canvas.requestPointerLock()
     }
-    const dur = Math.min(3000, e.timeStamp - downDur)
+    const dur = Math.min(maxCharge, e.timeStamp - downDur)
     let opts = { x: sprite.x, y: sprite.y }
-    let key
-    if (dur < 250) {
-      key = 'mine'
-    } else if (sprite.speed > 3) {
-      key = 'shot'
-    } else {
-      key = 'blast'
-    }
+    let key = dur > _dur ? (sprite.speed > 3 ? 'shot' : 'blast') : 'mine'
     Object.entries(BULLET_STATS[key]).forEach(([k, v]) => {
       opts[k] = typeof v === 'function' ? v({ dur, sprite }) : v
     })
@@ -56,18 +34,15 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
   })
 
   const moveCallback = (e) => {
-    sprite.speed = getSpeed(
-      e.movementX / PLAYER_SPEED,
-      e.movementY / PLAYER_SPEED,
-    )
-    if (sprite.speed > 0.2)
+    sprite.speed = getSpeed(e.movementX / speed, e.movementY / speed)
+    if (sprite.speed > BLAST_SPEED_THRESHOLD)
       sprite.angle = angleToTarget(sprite, {
-        x: sprite.x + e.movementX / PLAYER_SPEED,
-        y: sprite.y + e.movementY / PLAYER_SPEED,
+        x: sprite.x + e.movementX / speed,
+        y: sprite.y + e.movementY / speed,
       })
 
-    sprite.x += e.movementX / PLAYER_SPEED
-    sprite.y += e.movementY / PLAYER_SPEED
+    sprite.x += e.movementX / speed
+    sprite.y += e.movementY / speed
   }
 
   const changeCallback = () => {
@@ -82,12 +57,6 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
 
   return {
     sprite,
-    damage() {
-      sprite.health -= 10
-      if (sprite.health <= 0) {
-        sprite.die()
-      }
-    },
     shutdown() {
       document.removeEventListener('pointerlockchange', changeCallback, false)
     },

@@ -1,9 +1,8 @@
 import { Enemies } from '../entities/enemies'
 import { Player } from '../entities/player'
 import { Bullets } from '../entities/bullets'
-import { checkCollisions } from '../utils'
+import { checkCollisions, distance } from '../utils'
 import { Particles } from '../entities/particles'
-import { distance } from '../entities/enemy'
 import { Store } from '../entities/store'
 
 export const GameScene = ({ canvas, onWin }) => {
@@ -12,11 +11,13 @@ export const GameScene = ({ canvas, onWin }) => {
 
   const nextWave = () => {
     player.sprite.health = 100
-    enemies.spawn(300, 100, player.sprite)
+    enemies.spawn(player.sprite, 10, 1000)
   }
   let store = Store({ canvas, onNext: nextWave })
-  let player = Player({ canvas, x: 300, y: 300, bullets, store })
-  let enemies = Enemies({ particles })
+  const x = canvas.width / 2
+  const y = canvas.height / 2
+  let player = Player({ canvas, x, y, bullets, store })
+  let enemies = Enemies({ canvas, particles })
   const checkEnd = () => {
     setTimeout(() => {
       if (enemies.pool.getAliveObjects().length !== 0) return
@@ -27,7 +28,7 @@ export const GameScene = ({ canvas, onWin }) => {
   const playerEnemyCollide = (p, e) => {
     if (!p.isAlive()) return
     e.die()
-    p.damage(10)
+    p.takeDamage(e.damage)
     checkEnd()
 
     if (!p.isAlive()) onWin()
@@ -36,6 +37,7 @@ export const GameScene = ({ canvas, onWin }) => {
   const bulletEnemyCollide = (b, e) => {
     if (b.triggered || b.position.distance(player.sprite.position) < 100) return
     b.triggered = true
+    // TODO: refactor me
     setTimeout(() => {
       // bullets should only die when theyve got no energy?
       b.die()
