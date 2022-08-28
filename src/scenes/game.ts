@@ -79,7 +79,7 @@ export const GameScene = ({ canvas, onWin }) => {
       player.shutdown()
     },
     update() {
-      player.sprite.update()
+      player.update()
       enemies.pool.update()
       bullets.pool.update()
       particles.pool.update()

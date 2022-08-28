@@ -34,22 +34,46 @@ export class ShipSprite extends Sprite {
     this.strobeTimer--
     const w = this.width * 0.6
     const o = this.width / 2
-    this.context.fillStyle = this.color
+
+    // base circle
     this.context.lineWidth = 3
     this.context.strokeStyle = '#222'
+    this.context.fillStyle = this.color
     this.context.beginPath()
+    this.context.moveTo(o, o)
     this.context.arc(o, o, w, 0, 2 * Math.PI)
     this.context.closePath()
     this.context.stroke()
     this.context.fill()
+
+    // health
     this.context.beginPath()
-    this.context.fillStyle = '#111'
-    this.context.arc(o, o, w / 2, 0, 2 * Math.PI)
+    this.context.moveTo(o, o)
+    this.context.fillStyle = '#f00'
+    const f = 360 * (this.health / this.maxHealth)
+    this.context.arc(o, o, w, getRads(-90), getRads(f - 90))
+    this.context.closePath()
     this.context.fill()
+
+    // inner circle
     this.context.lineWidth = 1
     this.context.strokeStyle = '#555'
-    this.context.stroke()
+    this.context.fillStyle = '#111'
+    this.context.beginPath()
+    this.context.arc(o, o, w / 2, 0, 2 * Math.PI)
     this.context.closePath()
+    this.context.stroke()
+    this.context.fill()
+
+    // energy
+    this.context.beginPath()
+    this.context.moveTo(o, o)
+    this.context.fillStyle = '#0ff'
+    const c = this.chargeDuration > 0 ? this.chargeDuration : 0
+    const f2 = 360 * (c / 30)
+    this.context.arc(o, o, w / 2, getRads(-90), getRads(f2 - 90))
+    this.context.closePath()
+    this.context.fill()
 
     // debug line
     this.context.strokeStyle = '#0f0'
@@ -64,4 +88,8 @@ export class ShipSprite extends Sprite {
     this.context.lineTo(p.x, p.y)
     this.context.stroke()
   }
+}
+
+function getRads(degrees) {
+  return (Math.PI * degrees) / 180
 }

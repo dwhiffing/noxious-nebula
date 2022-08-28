@@ -14,18 +14,24 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
     color: '#666',
     width: size,
     height: size,
+    health: 100,
+    maxHealth: 100,
+    chargeDuration: 0,
   })
-  sprite.health = 100
-  let downDur = 0
   const _dur = MINE_CLICK_DURATION
-  onPointer('down', (e) => (downDur = e.timeStamp))
+  let isDown = false
+  onPointer('down', () => {
+    isDown = true
+  })
 
-  onPointer('up', (e) => {
+  onPointer('up', () => {
     if (store.getActive()) return
     if (canvas !== document.pointerLockElement) {
       return canvas.requestPointerLock()
     }
-    const dur = Math.min(maxCharge, e.timeStamp - downDur)
+    const dur = Math.min(maxCharge, sprite.chargeDuration * 100)
+    isDown = false
+    sprite.chargeDuration = -2
     let opts = { x: sprite.x, y: sprite.y }
     let key = dur > _dur ? (sprite.speed > 3 ? 'shot' : 'blast') : 'mine'
     Object.entries(BULLET_STATS[key]).forEach(([k, v]) => {
@@ -60,6 +66,10 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
 
   return {
     sprite,
+    update() {
+      sprite.update()
+      if (isDown) sprite.chargeDuration += 0.16
+    },
     shutdown() {
       document.removeEventListener('pointerlockchange', changeCallback, false)
     },

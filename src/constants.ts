@@ -20,6 +20,8 @@ export const ENEMY_STATS = {
     maxSpeed: 3.8,
     speed: 0.8,
     turnRate: 0.08,
+    health: 10,
+    maxHealth: 10,
     damage: 10,
   },
 }
