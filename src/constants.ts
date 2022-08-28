@@ -17,12 +17,14 @@ export const ENEMY_STATS = {
   base: {
     color: '#f00',
     size: 20,
+    movement: 'missile',
     maxSpeed: 3.8,
     speed: 0.8,
     turnRate: 0.08,
     health: 10,
     maxHealth: 10,
     damage: 10,
+    separateAmount: 30,
   },
   big: {
     color: '#f00',
@@ -47,7 +49,7 @@ export const BULLET_STATS = {
     size: 4,
     triggerRadius: 45,
     triggerDuration: 300,
-    explodeRadius: 35,
+    explodeRadius: 50,
     isMine: true,
     damage: 10,
   },

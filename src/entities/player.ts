@@ -1,12 +1,19 @@
 import { angleToTarget, onPointer } from 'kontra'
 import { BULLET_STATS, PLAYER_STATS } from '../constants'
-import { getSpeed } from '../utils'
+import { checkCollisionsBool, getSpeed } from '../utils'
 import { ShipSprite } from './sprite'
 
 const MINE_CLICK_DURATION = 250
 const BLAST_SPEED_THRESHOLD = 0.2
 
-export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
+export const Player = ({
+  canvas,
+  x: originX,
+  y: originY,
+  bullets,
+  store,
+  enemies,
+}) => {
   const { speed, maxCharge, size } = PLAYER_STATS
   let sprite = new ShipSprite({
     x: originX,
@@ -16,7 +23,7 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
     height: size,
     health: 100,
     maxHealth: 100,
-    chargeDuration: 0,
+    chargeDuration: -2,
   })
   const _dur = MINE_CLICK_DURATION
   let isDown = false
@@ -25,12 +32,12 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
   })
 
   onPointer('up', () => {
+    isDown = false
     if (store.getActive()) return
     if (canvas !== document.pointerLockElement) {
       return canvas.requestPointerLock()
     }
     const dur = Math.min(maxCharge, sprite.chargeDuration * 100)
-    isDown = false
     sprite.chargeDuration = -2
     let opts = { x: sprite.x, y: sprite.y }
     let key = dur > _dur ? (sprite.speed > 3 ? 'shot' : 'blast') : 'mine'
@@ -43,6 +50,8 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
   })
 
   const moveCallback = (e) => {
+    let prevX = sprite.x
+    let prevY = sprite.y
     sprite.speed = getSpeed(e.movementX / speed, e.movementY / speed)
     if (sprite.speed > BLAST_SPEED_THRESHOLD)
       sprite.angle = angleToTarget(sprite, {
@@ -52,6 +61,10 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
 
     sprite.x += e.movementX / speed
     sprite.y += e.movementY / speed
+    if (checkCollisionsBool([sprite], enemies.pool.getAliveObjects())) {
+      sprite.x = prevX
+      sprite.y = prevY
+    }
   }
 
   const changeCallback = () => {

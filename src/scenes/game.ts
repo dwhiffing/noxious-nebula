@@ -20,8 +20,8 @@ export const GameScene = ({ canvas, onWin }) => {
   let store = Store({ canvas, onNext: nextLevel })
   const x = canvas.width / 2
   const y = canvas.height / 2
-  let player = Player({ canvas, x, y, bullets, store })
   let enemies = Enemies({ canvas, particles })
+  let player = Player({ canvas, x, y, bullets, store, enemies })
   const checkEnd = () => {
     setTimeout(() => {
       if (enemies.pool.getAliveObjects().length !== 0) return
@@ -31,8 +31,11 @@ export const GameScene = ({ canvas, onWin }) => {
 
   const playerEnemyCollide = (p, e) => {
     if (!p.isAlive()) return
-    e.die()
-    p.takeDamage(e.damage)
+    // TODO: explode if explode stat is defined
+    if (e.movement === 'missile') {
+      e.die()
+      p.takeDamage(e.damage)
+    }
     checkEnd()
 
     if (!p.isAlive()) onWin()
@@ -40,6 +43,7 @@ export const GameScene = ({ canvas, onWin }) => {
 
   const bulletEnemyCollide = (b, e) => {
     if (b.triggered) return
+    // TODO: stat for mine explosion distance from player
     if (b.isMine && b.position.distance(player.sprite.position) < 100) return
     if (b.isMine) b.triggered = true
     // TODO: refactor me

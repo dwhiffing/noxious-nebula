@@ -36,6 +36,9 @@ export const checkCollisions = (groupA, groupB, onCollide) => {
   )
 }
 
+export const checkCollisionsBool = (groupA, groupB) =>
+  groupA.some((itemA) => groupB.some((itemB) => collides(itemA, itemB)))
+
 export function gradient({ x = 0, y = 0, ctx, r2, r1, c1, c2 }) {
   ctx.rect(x, y, r2 * 2, r2 * 2)
   var g = ctx.createRadialGradient(x + r2, y + r2, r1, x + r2, y + r2, r2)
