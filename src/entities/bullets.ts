@@ -24,6 +24,7 @@ export const Bullets = () => {
         isMine: opts.isMine || 0,
         ttl: opts.ttl || Infinity,
         triggered: false,
+        damage: opts.damage,
       })
     },
   }

@@ -38,7 +38,7 @@ export class ShipSprite extends Sprite {
     // base circle
     this.context.lineWidth = 3
     this.context.strokeStyle = '#222'
-    this.context.fillStyle = this.color
+    this.context.fillStyle = '#999'
     this.context.beginPath()
     this.context.moveTo(o, o)
     this.context.arc(o, o, w, 0, 2 * Math.PI)
@@ -49,7 +49,7 @@ export class ShipSprite extends Sprite {
     // health
     this.context.beginPath()
     this.context.moveTo(o, o)
-    this.context.fillStyle = '#f00'
+    this.context.fillStyle = this.color
     const f = 360 * (this.health / this.maxHealth)
     this.context.arc(o, o, w, getRads(-90), getRads(f - 90))
     this.context.closePath()

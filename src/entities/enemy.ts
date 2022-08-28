@@ -17,6 +17,8 @@ export class Enemy extends ShipSprite {
       color: stats.color,
       width: stats.size,
       height: stats.size,
+      health: stats.health,
+      maxHealth: stats.health,
       ...stats,
       ...properties,
     })

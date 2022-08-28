@@ -60,11 +60,11 @@ export const GameScene = ({ canvas, onWin }) => {
         enemies.pool
           .getAliveObjects()
           .filter((e) => distance(e, b) < b.explodeRadius)
-          .forEach((e: any) => e.die())
+          .forEach((e: any) => e.takeDamage(b.damage))
       } else {
         // TODO: calculate damge?
 
-        e.die()
+        e.takeDamage(b.damage)
       }
       checkEnd()
     }, b.triggerDuration)
