@@ -51,7 +51,7 @@ export class Enemy extends ShipSprite {
 
     // enforce max speed
     let _maxSpeed = maxSpeed * (1 - Math.abs(rDelta) / Math.PI)
-    const _speed = Math.sqrt(this.dx * this.dx + this.dy * this.dy)
+    const _speed = getSpeed(this.dx, this.dy)
     this.dx = (this.dx / _speed) * _maxSpeed
     this.dy = (this.dy / _speed) * _maxSpeed
   }
@@ -84,6 +84,8 @@ const wrapNumber = (n, min, max) => {
   if (n < min) return n + Math.abs(min) * 2
   return n
 }
+
+export const getSpeed = (x, y) => Math.sqrt(x * x + y * y)
 
 export const distance = (a, b) =>
   Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y))

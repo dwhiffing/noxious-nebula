@@ -6,7 +6,7 @@ export const Enemies = ({ particles }) => {
   return {
     pool,
     spawn(x, y, target) {
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 1; i++) {
         setTimeout(() => {
           pool.get({ x, y, ttl: Infinity, target, pool, particles })
         }, i * 100)

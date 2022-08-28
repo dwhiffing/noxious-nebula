@@ -1,6 +1,8 @@
-import { onPointer } from 'kontra'
+import { angleToTarget, onPointer } from 'kontra'
+import { getSpeed } from './enemy'
 import { ShipSprite } from './sprite'
 
+const _m = 4
 export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
   let sprite = new ShipSprite({
     x: originX,
@@ -10,19 +12,51 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
     height: 25,
   })
   sprite.health = 100
+  let downDur = 0
+  onPointer('down', (e) => (downDur = e.timeStamp))
 
-  onPointer('down', () => {
+  onPointer('up', (e) => {
     if (store.getActive()) return
     if (canvas !== document.pointerLockElement) {
-      canvas.requestPointerLock()
-    } else {
+      return canvas.requestPointerLock()
+    }
+    const dur = Math.min(3000, e.timeStamp - downDur)
+    if (dur < 250) {
       bullets.spawn({ x: sprite.x, y: sprite.y })
+    } else if (sprite.speed > 3) {
+      bullets.spawn({
+        x: sprite.x,
+        y: sprite.y,
+        size: dur / 250,
+        triggerDuration: 0,
+        speed: sprite.speed / 2,
+        explodeRadius: 0,
+        angle: sprite.angle - 1.57,
+      })
+    } else {
+      bullets.spawn({
+        x: sprite.x,
+        y: sprite.y,
+        size: dur / 50,
+        speed: 0,
+        triggerDuration: 0,
+        explodeRadius: 0,
+        opacityDecay: 0.05,
+        ttl: 50,
+      })
     }
   })
 
   const moveCallback = (e) => {
-    sprite.x += e.movementX / 6
-    sprite.y += e.movementY / 6
+    sprite.speed = getSpeed(e.movementX / _m, e.movementY / _m)
+    if (sprite.speed > 0.2)
+      sprite.angle = angleToTarget(sprite, {
+        x: sprite.x + e.movementX / _m,
+        y: sprite.y + e.movementY / _m,
+      })
+
+    sprite.x += e.movementX / _m
+    sprite.y += e.movementY / _m
   }
 
   const changeCallback = () => {
@@ -37,7 +71,6 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
 
   return {
     sprite,
-
     damage() {
       sprite.health -= 10
       if (sprite.health <= 0) {

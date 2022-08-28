@@ -37,19 +37,26 @@ export const GameScene = ({ canvas, onWin }) => {
     if (b.triggered || b.position.distance(player.sprite.position) < 100) return
     b.triggered = true
     setTimeout(() => {
+      // bullets should only die when theyve got no energy?
       b.die()
-      particles.spawn({
-        x: b.x,
-        y: b.y,
-        size: b.explodeRadius,
-        opacity: 0.9,
-        ttl: 40,
-      })
 
-      enemies.pool
-        .getAliveObjects()
-        .filter((e) => distance(e, b) < b.explodeRadius)
-        .forEach((e: any) => e.die())
+      if (b.explodeRadius) {
+        particles.spawn({
+          x: b.x,
+          y: b.y,
+          size: b.explodeRadius,
+          opacity: 0.9,
+          ttl: 40,
+        })
+        enemies.pool
+          .getAliveObjects()
+          .filter((e) => distance(e, b) < b.explodeRadius)
+          .forEach((e: any) => e.die())
+      } else {
+        // TODO: calculate damge?
+
+        e.die()
+      }
       checkEnd()
     }, b.triggerDuration)
   }
