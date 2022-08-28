@@ -15,7 +15,7 @@ export const Bullets = () => {
       triggerRadius = 45,
       triggerDuration = 300,
       explodeRadius = 35,
-      size = 8,
+      size = 3,
     }) {
       pool.get({
         x,
@@ -47,8 +47,8 @@ export class Bullet extends Sprite {
       ctx: this.context,
       r1: size - 1,
       r2: size,
-      c1: `rgba(255,${this.triggered ? '0,0' : '255,255'},1)`,
-      c2: `rgba(255,${this.triggered ? '0,0' : '255,255'},0)`,
+      c1: `rgba(120,${this.triggered ? '0,0' : '120,120'},1)`,
+      c2: `rgba(120,${this.triggered ? '0,0' : '120,120'},0)`,
     })
   }
 }
