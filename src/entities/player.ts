@@ -31,7 +31,9 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
     Object.entries(BULLET_STATS[key]).forEach(([k, v]) => {
       opts[k] = typeof v === 'function' ? v({ dur, sprite }) : v
     })
-    bullets.spawn(opts)
+
+    const bullet = bullets.spawn(opts)
+    if (key === 'blast') setTimeout(() => (bullet.triggered = true), 50)
   })
 
   const moveCallback = (e) => {

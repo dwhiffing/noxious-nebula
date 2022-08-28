@@ -10,7 +10,7 @@ export const Bullets = () => {
     pool,
     spawn(opts) {
       const { speed = 0, angle = 0 } = opts
-      pool.get({
+      return pool.get({
         x: opts.x,
         y: opts.y,
         anchor: { x: 0.5, y: 0.5 },
@@ -21,6 +21,7 @@ export const Bullets = () => {
         size: opts.size || 0,
         explodeRadius: opts.explodeRadius || 0,
         triggerDuration: opts.triggerDuration || 0,
+        isMine: opts.isMine || 0,
         ttl: opts.ttl || Infinity,
         triggered: false,
       })
@@ -47,8 +48,10 @@ class Bullet extends Sprite {
       ctx: this.context,
       r1: size - 1,
       r2: size,
-      c1: `rgba(120,${this.triggered ? '0,0' : '120,120'},${this.opacity})`,
-      c2: `rgba(120,${this.triggered ? '0,0' : '120,120'},0)`,
+      c1: `rgba(120,${this.isMine && this.triggered ? '0,0' : '120,120'},${
+        this.opacity
+      })`,
+      c2: `rgba(120,${this.isMine && this.triggered ? '0,0' : '120,120'},0)`,
     })
   }
 }

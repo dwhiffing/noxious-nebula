@@ -36,16 +36,18 @@ export const BULLET_STATS = {
     triggerRadius: 45,
     triggerDuration: 300,
     explodeRadius: 35,
+    isMine: true,
   },
   shot: {
-    triggerRadius: 45,
+    triggerRadius: 1,
     angle: ({ sprite }) => sprite.angle - 1.57,
     speed: ({ sprite }) => sprite.speed,
     size: ({ dur }) => dur / 250,
   },
   blast: {
     triggerRadius: 45,
-    ttl: 50,
+    explodeRadius: 45,
+    ttl: 30,
     size: ({ dur }) => dur / 50,
   },
 }

@@ -39,21 +39,24 @@ export const GameScene = ({ canvas, onWin }) => {
   }
 
   const bulletEnemyCollide = (b, e) => {
-    if (b.triggered || b.position.distance(player.sprite.position) < 100) return
-    b.triggered = true
+    if (b.triggered) return
+    if (b.isMine && b.position.distance(player.sprite.position) < 100) return
+    if (b.isMine) b.triggered = true
     // TODO: refactor me
     setTimeout(() => {
       // bullets should only die when theyve got no energy?
-      b.die()
 
       if (b.explodeRadius) {
-        particles.spawn({
-          x: b.x,
-          y: b.y,
-          size: b.explodeRadius,
-          opacity: 0.9,
-          ttl: 40,
-        })
+        if (b.isMine) {
+          b.die()
+          particles.spawn({
+            x: b.x,
+            y: b.y,
+            size: b.explodeRadius,
+            opacity: 0.9,
+            ttl: 40,
+          })
+        }
         enemies.pool
           .getAliveObjects()
           .filter((e) => distance(e, b) < b.explodeRadius)
