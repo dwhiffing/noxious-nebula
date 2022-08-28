@@ -4,16 +4,20 @@ import { Bullets } from '../entities/bullets'
 import { checkCollisions, distance } from '../utils'
 import { Particles } from '../entities/particles'
 import { Store } from '../entities/store'
+import { LEVELS } from '../constants'
 
 export const GameScene = ({ canvas, onWin }) => {
   let bullets = Bullets()
   let particles = Particles()
-
-  const nextWave = () => {
+  let levelIndex = 0
+  const nextLevel = () => {
     player.sprite.health = 100
-    enemies.spawn(player.sprite, 10, 1000)
+    let level = LEVELS[levelIndex]
+    enemies.spawn(player.sprite, level.waves[0])
+    bullets.pool.clear()
+    levelIndex++
   }
-  let store = Store({ canvas, onNext: nextWave })
+  let store = Store({ canvas, onNext: nextLevel })
   const x = canvas.width / 2
   const y = canvas.height / 2
   let player = Player({ canvas, x, y, bullets, store })
@@ -63,9 +67,9 @@ export const GameScene = ({ canvas, onWin }) => {
     }, b.triggerDuration)
   }
 
-  nextWave()
+  nextLevel()
   return {
-    nextWave,
+    nextLevel,
     shutdown() {
       enemies.pool.clear()
       bullets.pool.clear()

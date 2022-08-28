@@ -6,7 +6,7 @@ export const Enemies = ({ canvas, particles }) => {
   let pool = Pool({ create: () => new Enemy(), maxSize: MAX_ENEMIES })
   return {
     pool,
-    spawn(target, count = 1, rate = 0) {
+    spawn(target, { type = 'base', count = 1, rate = 0 }) {
       for (let i = 0; i < count; i++) {
         const b = 50
         let dir = randInt(0, 3)
@@ -27,7 +27,7 @@ export const Enemies = ({ canvas, particles }) => {
             target,
             pool,
             particles,
-            type: 'base',
+            type,
           })
         }, i * rate)
       }

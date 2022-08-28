@@ -1,3 +1,18 @@
+export const LEVELS = [
+  {
+    waves: [{ type: 'base', count: 5, rate: 1000 }],
+  },
+  {
+    waves: [{ type: 'base', count: 10, rate: 1000 }],
+  },
+  {
+    waves: [{ type: 'base', count: 20, rate: 1000 }],
+  },
+  {
+    waves: [{ type: 'base', count: 30, rate: 1000 }],
+  },
+]
+
 export const ENEMY_STATS = {
   base: {
     color: '#f00',
