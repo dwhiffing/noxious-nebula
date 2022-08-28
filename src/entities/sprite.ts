@@ -9,6 +9,8 @@ export class Sprite extends SpriteClass {
     if (this.health <= 0) return
     this.health -= n
     if (this.health <= 0) this.die()
+    this.justDamaged = true
+    setTimeout(() => (this.justDamaged = false), 100)
   }
 
   die() {

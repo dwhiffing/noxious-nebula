@@ -1,10 +1,11 @@
 import { Enemies } from '../entities/enemies'
 import { Player } from '../entities/player'
 import { Bullets } from '../entities/bullets'
-import { checkCollisions, distance } from '../utils'
+import { checkCollisions, distance, wrapNumber } from '../utils'
 import { Particles } from '../entities/particles'
 import { Store } from '../entities/store'
 import { LEVELS } from '../constants'
+import { angleToTarget, movePoint } from 'kontra'
 
 export const GameScene = ({ canvas, onWin }) => {
   let bullets = Bullets()
@@ -31,8 +32,12 @@ export const GameScene = ({ canvas, onWin }) => {
 
   const playerEnemyCollide = (p, e) => {
     if (!p.isAlive()) return
-    if (e.explodes) {
-      e.die()
+    if (e.explodes || e.spikey) {
+      const angle = wrapNumber(angleToTarget(p, e) + Math.PI, -Math.PI, Math.PI)
+      const pos = movePoint({ x: p.dx, y: p.dy }, angle, 20)
+      p.dx = pos.x
+      p.dy = pos.y
+      if (e.explodes) e.die()
       p.takeDamage(e.damage)
     }
     checkEnd()

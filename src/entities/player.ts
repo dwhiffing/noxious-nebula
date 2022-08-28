@@ -58,10 +58,16 @@ export const Player = ({
         x: sprite.x + e.movementX / speed,
         y: sprite.y + e.movementY / speed,
       })
-
-    sprite.x += e.movementX / speed
-    sprite.y += e.movementY / speed
-    if (checkCollisionsBool([sprite], enemies.pool.getAliveObjects())) {
+    if (!sprite.justDamaged) {
+      sprite.x += e.movementX / speed
+      sprite.y += e.movementY / speed
+    }
+    if (
+      checkCollisionsBool(
+        [sprite],
+        enemies.pool.getAliveObjects().filter((e) => !e.spikey),
+      )
+    ) {
       sprite.x = prevX
       sprite.y = prevY
     }
@@ -81,6 +87,13 @@ export const Player = ({
     sprite,
     update() {
       sprite.update()
+      if (sprite.x < size / 2) sprite.x = size / 2
+      if (sprite.x > canvas.width - size / 2) sprite.x = canvas.width - size / 2
+      if (sprite.y < size / 2) sprite.y = size / 2
+      if (sprite.y > canvas.height - size / 2)
+        sprite.y = canvas.height - size / 2
+      sprite.dx *= 0.7
+      sprite.dy *= 0.7
       if (isDown) sprite.chargeDuration += 0.16
     },
     shutdown() {

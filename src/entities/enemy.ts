@@ -1,4 +1,4 @@
-import { movePoint, angleToTarget } from 'kontra'
+import { movePoint, angleToTarget, randInt } from 'kontra'
 import { checkCollisionsBool, distance, getSpeed, wrapNumber } from '../utils'
 import { ENEMY_STATS } from '../constants'
 import { ShipSprite } from './sprite'
@@ -39,12 +39,22 @@ export class Enemy extends ShipSprite {
     let speedMulti = 1
 
     // rotate toward target
-    let angle = angleToTarget(this, target)
-    const rDelta = wrapNumber(angle - this.angle, -Math.PI, Math.PI)
-    if (Math.abs(rDelta) < turnRate) {
-      this.angle = angle
+    let rDelta = this.angle
+    if (turnRate) {
+      let angle = angleToTarget(this, target)
+      rDelta = wrapNumber(angle - this.angle, -Math.PI, Math.PI)
+      if (Math.abs(rDelta) < turnRate) {
+        this.angle = angle
+      } else {
+        this.angle += rDelta > 0 ? turnRate : -turnRate
+      }
     } else {
-      this.angle += rDelta > 0 ? turnRate : -turnRate
+      const rand = randInt(-100, 100) / 100
+      // TODO: should bounce instead of a random new angle if not spawning
+      if (this.x > 740 - this.width) this.angle = Math.PI / -2 + rand
+      if (this.x < 0) this.angle = Math.PI / 2 + rand
+      if (this.y > 540 - this.width) this.angle = 0 + rand
+      if (this.y < 0) this.angle = Math.PI + rand
     }
 
     // move closer/further/hold position based on distance to target
@@ -73,12 +83,14 @@ export class Enemy extends ShipSprite {
     }
 
     // separate from others
-    this.pool.getAliveObjects().forEach((otherEnemy: any) => {
-      if (otherEnemy === this || distance(this, otherEnemy) > separateAmount)
-        return
-      this.dx += (this.x - otherEnemy.x) * 0.02
-      this.dy += (this.y - otherEnemy.y) * 0.02
-    })
+    if (separateAmount) {
+      this.pool.getAliveObjects().forEach((otherEnemy: any) => {
+        if (otherEnemy === this || distance(this, otherEnemy) > separateAmount)
+          return
+        this.dx += (this.x - otherEnemy.x) * 0.02
+        this.dy += (this.y - otherEnemy.y) * 0.02
+      })
+    }
 
     // enforce max speed
     if (maxSpeed) {
