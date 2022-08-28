@@ -5,17 +5,18 @@ import { ShipSprite } from './sprite'
 
 const MINE_CLICK_DURATION = 250
 const BLAST_SPEED_THRESHOLD = 0.2
+
 export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
+  const { speed, maxCharge, size } = PLAYER_STATS
   let sprite = new ShipSprite({
     x: originX,
     y: originY,
     color: '#666',
-    width: 25,
-    height: 25,
+    width: size,
+    height: size,
   })
   sprite.health = 100
   let downDur = 0
-  const { speed, maxCharge } = PLAYER_STATS
   const _dur = MINE_CLICK_DURATION
   onPointer('down', (e) => (downDur = e.timeStamp))
 

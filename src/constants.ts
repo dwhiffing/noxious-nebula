@@ -16,7 +16,7 @@ export const LEVELS = [
 export const ENEMY_STATS = {
   base: {
     color: '#f00',
-    size: 15,
+    size: 20,
     maxSpeed: 3.8,
     speed: 0.8,
     turnRate: 0.08,
@@ -28,6 +28,7 @@ export const PLAYER_STATS = {
   mineClickDuration: 250,
   maxCharge: 3000,
   speed: 4,
+  size: 30,
 }
 export const BULLET_STATS = {
   mine: {
