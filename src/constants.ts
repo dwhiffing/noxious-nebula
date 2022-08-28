@@ -1,6 +1,6 @@
 export const LEVELS = [
   {
-    waves: [{ type: 'big', count: 5, rate: 1000 }],
+    waves: [{ type: 'absorber', count: 10, rate: 100 }],
   },
   {
     waves: [{ type: 'base', count: 10, rate: 1000 }],
@@ -13,28 +13,62 @@ export const LEVELS = [
   },
 ]
 
-export const ENEMY_STATS = {
+interface EnemyStats {
+  color: string
+  size: number
+  speed: number
+  turnRate: number
+  health: number
+  damage: number
+  separateAmount: number
+  exhaust?: boolean
+  collides?: boolean
+  explodes?: boolean
+  maxSpeed?: number
+  friction?: number
+  maxTargetDistance?: number
+  minTargetDistance?: number
+}
+
+export const ENEMY_STATS: Record<string, EnemyStats> = {
   base: {
     color: '#f00',
     size: 20,
-    movement: 'missile',
+    exhaust: true,
+    explodes: true,
     maxSpeed: 3.8,
     speed: 0.8,
     turnRate: 0.08,
     health: 10,
-    maxHealth: 10,
     damage: 10,
     separateAmount: 30,
   },
   big: {
     color: '#f00',
+    exhaust: true,
+    explodes: true,
     size: 30,
     maxSpeed: 2.8,
     speed: 0.5,
     turnRate: 0.04,
     health: 40,
-    maxHealth: 40,
     damage: 20,
+    separateAmount: 30,
+  },
+  absorber: {
+    color: '#ff0',
+    friction: 0.2,
+    size: 30,
+    speed: 4,
+    turnRate: 4,
+    health: 15,
+    damage: 20,
+    separateAmount: 60,
+    collides: true,
+    exhaust: false,
+    explodes: false,
+    maxTargetDistance: 200,
+    minTargetDistance: 100,
   },
 }
 

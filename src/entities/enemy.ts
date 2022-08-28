@@ -1,10 +1,7 @@
 import { movePoint, angleToTarget } from 'kontra'
-import { distance, getSpeed, wrapNumber } from '../utils'
+import { checkCollisionsBool, distance, getSpeed, wrapNumber } from '../utils'
 import { ENEMY_STATS } from '../constants'
 import { ShipSprite } from './sprite'
-
-const SEP_AMOUNT = 30
-const SEP_FACTOR = 0.01
 
 export class Enemy extends ShipSprite {
   constructor(properties = {}) {
@@ -14,25 +11,32 @@ export class Enemy extends ShipSprite {
   init(properties) {
     const stats = ENEMY_STATS[properties.type || 'base']
     super.init({
-      color: stats.color,
       width: stats.size,
       height: stats.size,
-      health: stats.health,
       maxHealth: stats.health,
       ...stats,
       ...properties,
     })
-    this.target = properties.target
-    // TODO: set a random duration for each enemy, when the duration is reached, stop updating targetPos, sleep for a random duration. then wake up
     this.targetPos = this.target ? { x: this.target.x, y: this.target.y } : null
-    this.pool = properties.pool
-    this.particles = properties.particles
     this.angle = 0
     this.exhaustTimer = 0
+    // TODO: set a random duration for each enemy, when the duration is reached, stop updating targetPos, sleep for a random duration. then wake up
   }
 
   move(target) {
-    const { maxSpeed, speed, turnRate } = ENEMY_STATS[this.type]
+    const {
+      maxSpeed,
+      speed,
+      turnRate,
+      friction,
+      separateAmount,
+      maxTargetDistance,
+      minTargetDistance,
+    } = ENEMY_STATS[this.type]
+
+    let prevX = this.x
+    let prevY = this.y
+    let speedMulti = 1
 
     // rotate toward target
     let angle = angleToTarget(this, target)
@@ -42,25 +46,55 @@ export class Enemy extends ShipSprite {
     } else {
       this.angle += rDelta > 0 ? turnRate : -turnRate
     }
+
+    // move closer/further/hold position based on distance to target
+    if (maxTargetDistance) {
+      const dist = distance(this, target)
+      if (dist < maxTargetDistance) {
+        speedMulti = 0
+        if (minTargetDistance && dist < minTargetDistance) {
+          speedMulti = 1
+          this.angle += Math.PI
+        }
+      }
+    }
+
     this.angle = wrapNumber(this.angle, -Math.PI, Math.PI)
 
     // move toward facing angle
-    const pos = movePoint(this.position, this.angle, speed)
+    const pos = movePoint(this.position, this.angle, speed * speedMulti)
     this.dx += pos.x - this.position.x
     this.dy += pos.y - this.position.y
 
+    // apply friction to non missiles
+    if (friction) {
+      this.dx *= friction
+      this.dy *= friction
+    }
+
     // separate from others
     this.pool.getAliveObjects().forEach((otherEnemy: any) => {
-      if (otherEnemy === this || distance(this, otherEnemy) > SEP_AMOUNT) return
-      this.dx += (this.x - otherEnemy.x) * SEP_FACTOR
-      this.dy += (this.y - otherEnemy.y) * SEP_FACTOR
+      if (otherEnemy === this || distance(this, otherEnemy) > separateAmount)
+        return
+      this.dx += (this.x - otherEnemy.x) * 0.02
+      this.dy += (this.y - otherEnemy.y) * 0.02
     })
 
     // enforce max speed
-    let _maxSpeed = maxSpeed * (1 - Math.abs(rDelta) / Math.PI)
-    const _speed = getSpeed(this.dx, this.dy)
-    this.dx = (this.dx / _speed) * _maxSpeed
-    this.dy = (this.dy / _speed) * _maxSpeed
+    if (maxSpeed) {
+      let _maxSpeed = maxSpeed * (1 - Math.abs(rDelta) / Math.PI)
+      const _speed = getSpeed(this.dx, this.dy)
+      this.dx = (this.dx / _speed) * _maxSpeed
+      this.dy = (this.dy / _speed) * _maxSpeed
+    }
+
+    // separate from player
+    if (this.collides && checkCollisionsBool([this], [this.target])) {
+      this.dx = 0
+      this.dy = 0
+      this.x = prevX
+      this.y = prevY
+    }
   }
 
   update() {
@@ -70,6 +104,7 @@ export class Enemy extends ShipSprite {
     if (this.targetPos) this.move(this.targetPos)
 
     // draw exhaust
+    if (!this.exhaust) return
     if (this.exhaustTimer-- < 1) {
       const size = ENEMY_STATS[this.type || 'base'].size
       this.exhaustTimer = Math.floor(size / 10)

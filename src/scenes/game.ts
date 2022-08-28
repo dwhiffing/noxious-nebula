@@ -31,8 +31,7 @@ export const GameScene = ({ canvas, onWin }) => {
 
   const playerEnemyCollide = (p, e) => {
     if (!p.isAlive()) return
-    // TODO: explode if explode stat is defined
-    if (e.movement === 'missile') {
+    if (e.explodes) {
       e.die()
       p.takeDamage(e.damage)
     }

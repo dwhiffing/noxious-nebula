@@ -20,15 +20,9 @@ export const Enemies = ({ canvas, particles }) => {
           if (dir === 3) y = canvas.height + b
         }
         setTimeout(() => {
-          pool.get({
-            x,
-            y,
-            ttl: Infinity,
-            target,
-            pool,
-            particles,
-            type,
-          })
+          const ttl = Infinity
+          const stats = { x, y, ttl, target, pool, particles, type }
+          pool.get(stats)
         }, i * rate)
       }
     },
