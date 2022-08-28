@@ -2,7 +2,26 @@ import { angleToTarget, onPointer } from 'kontra'
 import { getSpeed } from './enemy'
 import { ShipSprite } from './sprite'
 
-const _m = 4
+const PLAYER_SPEED = 4
+const BULLET_STATS = {
+  mine: {
+    size: 3,
+    triggerRadius: 45,
+    triggerDuration: 300,
+    explodeRadius: 35,
+  },
+  shot: {
+    triggerRadius: 45,
+    angle: ({ sprite }) => sprite.angle - 1.57,
+    speed: ({ sprite }) => sprite.speed / 2,
+    size: ({ dur }) => dur / 250,
+  },
+  blast: {
+    triggerRadius: 45,
+    ttl: 50,
+    size: ({ dur }) => dur / 50,
+  },
+}
 export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
   let sprite = new ShipSprite({
     x: originX,
@@ -21,42 +40,34 @@ export const Player = ({ canvas, x: originX, y: originY, bullets, store }) => {
       return canvas.requestPointerLock()
     }
     const dur = Math.min(3000, e.timeStamp - downDur)
+    let opts = { x: sprite.x, y: sprite.y }
+    let key
     if (dur < 250) {
-      bullets.spawn({ x: sprite.x, y: sprite.y })
+      key = 'mine'
     } else if (sprite.speed > 3) {
-      bullets.spawn({
-        x: sprite.x,
-        y: sprite.y,
-        size: dur / 250,
-        triggerDuration: 0,
-        speed: sprite.speed / 2,
-        explodeRadius: 0,
-        angle: sprite.angle - 1.57,
-      })
+      key = 'shot'
     } else {
-      bullets.spawn({
-        x: sprite.x,
-        y: sprite.y,
-        size: dur / 50,
-        speed: 0,
-        triggerDuration: 0,
-        explodeRadius: 0,
-        opacityDecay: 0.05,
-        ttl: 50,
-      })
+      key = 'blast'
     }
+    Object.entries(BULLET_STATS[key]).forEach(([k, v]) => {
+      opts[k] = typeof v === 'function' ? v({ dur, sprite }) : v
+    })
+    bullets.spawn(opts)
   })
 
   const moveCallback = (e) => {
-    sprite.speed = getSpeed(e.movementX / _m, e.movementY / _m)
+    sprite.speed = getSpeed(
+      e.movementX / PLAYER_SPEED,
+      e.movementY / PLAYER_SPEED,
+    )
     if (sprite.speed > 0.2)
       sprite.angle = angleToTarget(sprite, {
-        x: sprite.x + e.movementX / _m,
-        y: sprite.y + e.movementY / _m,
+        x: sprite.x + e.movementX / PLAYER_SPEED,
+        y: sprite.y + e.movementY / PLAYER_SPEED,
       })
 
-    sprite.x += e.movementX / _m
-    sprite.y += e.movementY / _m
+    sprite.x += e.movementX / PLAYER_SPEED
+    sprite.y += e.movementY / PLAYER_SPEED
   }
 
   const changeCallback = () => {

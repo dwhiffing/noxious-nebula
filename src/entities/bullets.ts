@@ -14,11 +14,10 @@ export const Bullets = () => {
       y,
       angle = 0,
       speed = 0,
-      triggerRadius = 45,
-      triggerDuration = 300,
-      explodeRadius = 35,
-      size = 3,
-      opacityDecay = 0,
+      triggerRadius = 0,
+      triggerDuration = 0,
+      explodeRadius = 0,
+      size = 0,
       ttl = Infinity,
     }) {
       pool.get({
@@ -32,7 +31,6 @@ export const Bullets = () => {
         size,
         explodeRadius,
         triggerDuration,
-        opacityDecay,
         ttl,
         triggered: false,
         exploded: false,
@@ -51,7 +49,7 @@ export class Bullet extends Sprite {
     this.opacity = 1
   }
   draw() {
-    if (this.opacityDecay) this.opacity -= this.opacityDecay
+    if (this.ttl) this.opacity -= 1 / this.ttl
     const size = this.size
     gradient({
       x: this.width / 2 - size,

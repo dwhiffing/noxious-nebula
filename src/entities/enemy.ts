@@ -72,7 +72,6 @@ export class Enemy extends ShipSprite {
       y: this.y + size / 2,
       size: 12,
       opacity: 1,
-      opacityDecay: 0.05,
       ttl: 20,
     })
     super.die()
