@@ -14,9 +14,14 @@ export class Enemy extends ShipSprite {
   init(properties) {
     super.init({ color: '#f00', width: size, height: size, ...properties })
     this.target = properties.target
+    // set a random duration for each enemy
+    // when the duration is reached, stop updating targetPos, sleep for a random duration
+    // then wake up
+    this.targetPos = this.target ? { x: this.target.x, y: this.target.y } : null
     this.pool = properties.pool
     this.particles = properties.particles
     this.angle = 0
+
     // particle timer
     this._p = 0
   }
@@ -53,11 +58,24 @@ export class Enemy extends ShipSprite {
 
   update() {
     super.update()
-    if (this.target) this.move(this.target)
+    this.targetPos = this.target ? { x: this.target.x, y: this.target.y } : null
+    if (this.targetPos) this.move(this.targetPos)
     if (this._p-- < 1) {
       this._p = 2
       this.particles.spawn({ x: this.x + size / 2, y: this.y + size / 2 })
     }
+  }
+
+  die() {
+    this.particles.spawn({
+      x: this.x + size / 2,
+      y: this.y + size / 2,
+      size: 12,
+      opacity: 1,
+      opacityDecay: 0.05,
+      ttl: 20,
+    })
+    super.die()
   }
 }
 
