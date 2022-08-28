@@ -38,6 +38,14 @@ export const GameScene = ({ canvas, onWin }) => {
     b.triggered = true
     setTimeout(() => {
       b.die()
+      particles.spawn({
+        x: b.x,
+        y: b.y,
+        size: b.explodeRadius,
+        opacity: 0.9,
+        ttl: 40,
+      })
+
       enemies.pool
         .getAliveObjects()
         .filter((e) => distance(e, b) < b.explodeRadius)

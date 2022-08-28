@@ -56,7 +56,7 @@ export class Enemy extends ShipSprite {
     if (this.target) this.move(this.target)
     if (this._p-- < 1) {
       this._p = 2
-      this.particles.spawn(this.x + size / 2, this.y + size / 2)
+      this.particles.spawn({ x: this.x + size / 2, y: this.y + size / 2 })
     }
   }
 }

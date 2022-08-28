@@ -6,8 +6,8 @@ export const Particles = () => {
   let pool = Pool({ create: () => new Circle(), maxSize: 100 })
   return {
     pool,
-    spawn(x, y) {
-      pool.get({ x, y, width: 3, ttl: 15, opacity: 0.4 })
+    spawn({ x, y, size = 3, ttl = 15, opacity = 0.4, opacityDecay = 0.03 }) {
+      pool.get({ x, y, width: size, ttl, opacity, opacityDecay })
     },
   }
 }
@@ -19,16 +19,16 @@ class Circle extends Sprite {
 
   update() {
     super.update()
-    this.opacity -= 0.03
+    this.opacity -= this.opacityDecay
   }
 
   draw() {
     gradient({
       ctx: this.context,
-      x: this.width * -2,
-      y: this.width * -2,
-      r1: this.width,
-      r2: this.width * 2,
+      x: -this.width,
+      y: -this.width,
+      r1: this.width / 1.5,
+      r2: this.width,
       c1: `rgba(255,255,255,${this.opacity})`,
       c2: `rgba(255,255,255,0)`,
     })
