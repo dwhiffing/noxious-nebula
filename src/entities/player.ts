@@ -23,6 +23,8 @@ export const Player = ({
     chargeRate,
     mineRate,
     health,
+    shield,
+    shieldChargeRate,
   } = PLAYER_STATS
   let sprite = new ShipSprite({
     x: originX,
@@ -34,6 +36,7 @@ export const Player = ({
     maxHealth: health,
     chargeDuration: -2,
     mineDuration: 0,
+    shield: shield,
   })
   const _dur = MINE_CLICK_DURATION
   let isDown = false
@@ -116,6 +119,7 @@ export const Player = ({
         sprite.y = canvas.height - size / 2
       sprite.dx *= 0.7
       sprite.dy *= 0.7
+      if (sprite.shield > 0) sprite.shield += shieldChargeRate
       if (isDown) sprite.chargeDuration += chargeRate
       if (sprite.mineDuration > 0) sprite.mineDuration -= mineRate
     },

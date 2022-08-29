@@ -7,7 +7,16 @@ export class Sprite extends SpriteClass {
 
   takeDamage(n) {
     if (this.health <= 0) return
-    this.health -= n
+    if (this.shield > 0) {
+      if (n > this.shield) {
+        n -= this.shield
+        this.shield = 0
+      } else {
+        this.shield -= n
+        n = 0
+      }
+    }
+    if (n > 0) this.health -= n
     if (this.health <= 0) this.die()
     this.justDamaged = true
     setTimeout(() => (this.justDamaged = false), 100)
@@ -77,7 +86,18 @@ export class ShipSprite extends Sprite {
     this.context.closePath()
     this.context.fill()
 
+    // energy
+    if (this.shield > 0) {
+      this.context.beginPath()
+      this.context.lineWidth = 3
+      this.context.strokeStyle = `rgba(0,200,0,${this.shield / 100})`
+      this.context.arc(o, o, w + 6, getRads(-90), getRads(360 - 90))
+      this.context.closePath()
+      this.context.stroke()
+    }
+
     // debug line
+    this.context.lineWidth = 1
     this.context.strokeStyle = '#0f0'
 
     const p = movePoint(

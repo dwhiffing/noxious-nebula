@@ -132,6 +132,8 @@ export const PLAYER_STATS = {
   maxCharge: 3000,
   mineRate: 0.16,
   health: 100,
+  shield: 0,
+  shieldChargeRate: 0.1,
 }
 export const BULLET_STATS = {
   mine: {
