@@ -9,7 +9,7 @@ export class Enemy extends ShipSprite {
   }
 
   init(properties) {
-    const stats = ENEMY_STATS[properties.type || 'base']
+    const stats = ENEMY_STATS[properties.type || 'homer']
     super.init({
       width: stats.size,
       height: stats.size,
@@ -118,7 +118,7 @@ export class Enemy extends ShipSprite {
     // draw exhaust
     if (!this.exhaust) return
     if (this.exhaustTimer-- < 1) {
-      const size = ENEMY_STATS[this.type || 'base'].size
+      const size = ENEMY_STATS[this.type || 'homer'].size
       this.exhaustTimer = Math.floor(size / 10)
       this.particles.spawn({
         x: this.x + size / 2,
@@ -131,7 +131,7 @@ export class Enemy extends ShipSprite {
   }
 
   die() {
-    const size = ENEMY_STATS[this.type || 'base'].size
+    const size = ENEMY_STATS[this.type || 'homer'].size
 
     // draw explosion
     this.particles.spawn({

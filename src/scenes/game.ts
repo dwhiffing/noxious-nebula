@@ -14,7 +14,9 @@ export const GameScene = ({ canvas, onWin }) => {
   const nextLevel = () => {
     player.sprite.health = 100
     let level = LEVELS[levelIndex]
-    enemies.spawn(player.sprite, level.waves[0])
+    level.waves.forEach((wave) =>
+      setTimeout(() => enemies.spawn(player.sprite, wave), wave.delay || 0),
+    )
     bullets.pool.clear()
     levelIndex++
   }

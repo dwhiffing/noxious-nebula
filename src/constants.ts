@@ -1,15 +1,44 @@
 export const LEVELS = [
   {
-    waves: [{ type: 'spike', count: 10, rate: 100 }],
+    waves: [{ type: 'homer', count: 15, rate: 2000 }],
   },
   {
-    waves: [{ type: 'base', count: 10, rate: 1000 }],
+    waves: [{ type: 'homer', count: 30, rate: 800 }],
   },
   {
-    waves: [{ type: 'base', count: 20, rate: 1000 }],
+    waves: [{ type: 'defender', count: 8, rate: 1000 }],
   },
   {
-    waves: [{ type: 'base', count: 30, rate: 1000 }],
+    waves: [
+      { type: 'defender', count: 8, rate: 1000 },
+      { type: 'homer', count: 8, rate: 1000, delay: 5000 },
+    ],
+  },
+  {
+    waves: [
+      // should spawn in circle instead of randomly
+      { type: 'defender', count: 8, rate: 1000 },
+      { type: 'homer', count: 8, rate: 1000, delay: 5000 },
+    ],
+  },
+  {
+    waves: [{ type: 'absorber', count: 8, rate: 1000 }],
+  },
+  {
+    waves: [
+      { type: 'defender', count: 8, rate: 1000 },
+      { type: 'absorber', count: 8, rate: 1000 },
+    ],
+  },
+  {
+    waves: [
+      { type: 'defender', count: 8, rate: 1000 },
+      { type: 'absorber', count: 8, rate: 1000 },
+      { type: 'homer', count: 8, rate: 1000 },
+    ],
+  },
+  {
+    waves: [{ type: 'spike', count: 16, rate: 1000 }],
   },
 ]
 
@@ -32,7 +61,7 @@ interface EnemyStats {
 }
 
 export const ENEMY_STATS: Record<string, EnemyStats> = {
-  base: {
+  homer: {
     color: '#f00',
     size: 20,
     exhaust: true,
@@ -55,6 +84,22 @@ export const ENEMY_STATS: Record<string, EnemyStats> = {
     health: 40,
     damage: 20,
     separateAmount: 30,
+  },
+  defender: {
+    color: '#0f0',
+    friction: 0.2,
+    size: 40,
+    speed: 4,
+    turnRate: 4,
+    health: 15,
+    damage: 20,
+    separateAmount: 60,
+    spikey: true,
+    collides: true,
+    exhaust: false,
+    explodes: false,
+    maxTargetDistance: 200,
+    minTargetDistance: 100,
   },
   absorber: {
     color: '#ff0',
