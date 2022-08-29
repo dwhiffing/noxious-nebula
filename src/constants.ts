@@ -123,12 +123,15 @@ export const ENEMY_STATS: Record<string, EnemyStats> = {
 
 export const PLAYER_STATS = {
   mineClickDuration: 250,
-  maxCharge: 3000,
   speed: 4,
   size: 30,
   maxMines: 5,
   mineLayRate: 1000,
   mineProximity: 20,
+  chargeRate: 0.16,
+  maxCharge: 3000,
+  mineRate: 0.16,
+  health: 100,
 }
 export const BULLET_STATS = {
   mine: {

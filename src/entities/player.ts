@@ -14,15 +14,24 @@ export const Player = ({
   store,
   enemies,
 }) => {
-  const { speed, maxCharge, size, maxMines, mineProximity } = PLAYER_STATS
+  const {
+    speed,
+    maxCharge,
+    size,
+    maxMines,
+    mineProximity,
+    chargeRate,
+    mineRate,
+    health,
+  } = PLAYER_STATS
   let sprite = new ShipSprite({
     x: originX,
     y: originY,
     color: '#666',
     width: size,
     height: size,
-    health: 100,
-    maxHealth: 100,
+    health: health,
+    maxHealth: health,
     chargeDuration: -2,
     mineDuration: 0,
   })
@@ -107,8 +116,8 @@ export const Player = ({
         sprite.y = canvas.height - size / 2
       sprite.dx *= 0.7
       sprite.dy *= 0.7
-      if (isDown) sprite.chargeDuration += 0.16
-      if (sprite.mineDuration > 0) sprite.mineDuration -= 0.16
+      if (isDown) sprite.chargeDuration += chargeRate
+      if (sprite.mineDuration > 0) sprite.mineDuration -= mineRate
     },
     shutdown() {
       document.removeEventListener('pointerlockchange', changeCallback, false)
