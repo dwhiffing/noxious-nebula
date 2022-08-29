@@ -27,7 +27,7 @@ export const GameScene = ({ canvas, onWin }) => {
   let player = Player({ canvas, x, y, bullets, store, enemies })
   const checkEnd = () => {
     setTimeout(() => {
-      if (enemies.pool.getAliveObjects().length !== 0) return
+      if (enemies.getRemaining() > 0) return
       store.setActive(true)
     }, 500)
   }

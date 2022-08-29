@@ -5,10 +5,15 @@ import { ENEMY_STATS } from '../constants'
 const MAX_ENEMIES = 50
 export const Enemies = ({ canvas, particles }) => {
   let pool = Pool({ create: () => new Enemy(), maxSize: MAX_ENEMIES })
+  let toSpawn = 0
   return {
     pool,
+    getRemaining() {
+      return toSpawn + pool.getAliveObjects().length
+    },
     spawn(target, wave) {
       let { type = 'homer', count = 1, rate = 0, circular, wall, dir } = wave
+      toSpawn += count
       dir = dir ?? randInt(0, 3)
       for (let i = 0; i < count; i++) {
         let x, y
@@ -43,6 +48,7 @@ export const Enemies = ({ canvas, particles }) => {
             const ttl = Infinity
             const stats = { x, y, ttl, target, pool, particles, type }
             pool.get(stats)
+            toSpawn--
           },
           wall ? 0 : i * rate,
         )
