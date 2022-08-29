@@ -3,6 +3,7 @@ import { checkCollisionsBool, distance, getSpeed, wrapNumber } from '../utils'
 import { ENEMY_STATS } from '../constants'
 import { ShipSprite } from './sprite'
 
+const DEFENDER_SHIELD_RANGE = 150
 export class Enemy extends ShipSprite {
   constructor(properties = {}) {
     super(properties)
@@ -85,7 +86,11 @@ export class Enemy extends ShipSprite {
     // separate from others
     if (separateAmount) {
       this.pool.getAliveObjects().forEach((otherEnemy: any) => {
-        if (otherEnemy === this || distance(this, otherEnemy) > separateAmount)
+        if (
+          otherEnemy === this ||
+          otherEnemy.type !== this.type ||
+          distance(this, otherEnemy) > separateAmount
+        )
           return
         this.dx += (this.x - otherEnemy.x) * 0.02
         this.dy += (this.y - otherEnemy.y) * 0.02
@@ -109,12 +114,43 @@ export class Enemy extends ShipSprite {
     }
   }
 
+  draw() {
+    if (this.type === 'defender') {
+      this.getNearbyEnemies().forEach((n) => {
+        this.context.lineWidth = 3
+        this.context.strokeStyle = '#0f0'
+        this.context.beginPath()
+        this.context.moveTo(this.width / 2, this.width / 2)
+        const p = n.position.subtract(this.position)
+        this.context.lineTo(p.x + n.width / 2, p.y + n.width / 2)
+        this.context.stroke()
+      })
+    }
+    super.draw()
+  }
+
+  getNearbyEnemies() {
+    return this.pool
+      .getAliveObjects()
+      .filter(
+        (t) =>
+          t.type !== 'defender' &&
+          t.position.distance(this) < DEFENDER_SHIELD_RANGE,
+      )
+  }
+
   update() {
     super.update()
 
     this.targetPos = this.target ? { x: this.target.x, y: this.target.y } : null
     if (this.targetPos) this.move(this.targetPos)
 
+    if (this.type === 'defender') {
+      this.getNearbyEnemies().forEach((n) => {
+        if (!n.shield || n.shield < 100) n.shield = 100
+      })
+    }
+    if (this.shield > 0) this.shield -= 1
     // draw exhaust
     if (!this.exhaust) return
     if (this.exhaustTimer-- < 1) {
