@@ -44,7 +44,7 @@ class Bullet extends Sprite {
   update() {
     super.update()
     // home in on nearby enemies
-    if (typeof this.dx === 'number' || typeof this.dy === 'number') {
+    if (this.dx !== 0 && this.dy !== 0) {
       const nearby = this.enemies.pool
         .getAliveObjects()
         .filter((e) => e.position.distance(this) < 200)
