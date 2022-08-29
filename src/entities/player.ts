@@ -14,7 +14,7 @@ export const Player = ({
   store,
   enemies,
 }) => {
-  const { speed, maxCharge, size } = PLAYER_STATS
+  const { speed, maxCharge, size, maxMines, mineProximity } = PLAYER_STATS
   let sprite = new ShipSprite({
     x: originX,
     y: originY,
@@ -24,6 +24,7 @@ export const Player = ({
     health: 100,
     maxHealth: 100,
     chargeDuration: -2,
+    mineDuration: 0,
   })
   const _dur = MINE_CLICK_DURATION
   let isDown = false
@@ -44,6 +45,18 @@ export const Player = ({
     Object.entries(BULLET_STATS[key]).forEach(([k, v]) => {
       opts[k] = typeof v === 'function' ? v({ dur, sprite }) : v
     })
+
+    if (key === 'mine') {
+      const mines = bullets.pool.getAliveObjects().filter((b) => b.isMine)
+      if (
+        mines.length >= maxMines ||
+        mines.some((b) => b.position.distance(sprite) < mineProximity) ||
+        sprite.mineDuration > 0
+      )
+        return
+
+      sprite.mineDuration = 10
+    }
 
     const bullet = bullets.spawn(opts)
     if (key === 'blast') setTimeout(() => (bullet.triggered = true), 50)
@@ -95,6 +108,7 @@ export const Player = ({
       sprite.dx *= 0.7
       sprite.dy *= 0.7
       if (isDown) sprite.chargeDuration += 0.16
+      if (sprite.mineDuration > 0) sprite.mineDuration -= 0.16
     },
     shutdown() {
       document.removeEventListener('pointerlockchange', changeCallback, false)

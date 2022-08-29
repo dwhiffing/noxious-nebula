@@ -126,6 +126,9 @@ export const PLAYER_STATS = {
   maxCharge: 3000,
   speed: 4,
   size: 30,
+  maxMines: 5,
+  mineLayRate: 1000,
+  mineProximity: 20,
 }
 export const BULLET_STATS = {
   mine: {
