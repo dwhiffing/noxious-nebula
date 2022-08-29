@@ -1,4 +1,4 @@
-import { Pool } from 'kontra'
+import { angleToTarget, movePoint, Pool } from 'kontra'
 import { gradient } from '../utils'
 import { Sprite } from './sprite'
 
@@ -9,7 +9,7 @@ export const Bullets = () => {
   return {
     pool,
     spawn(opts) {
-      const { speed = 0, angle = 0 } = opts
+      const { speed = 0, angle = 0, enemies } = opts
       return pool.get({
         x: opts.x,
         y: opts.y,
@@ -25,6 +25,7 @@ export const Bullets = () => {
         ttl: opts.ttl || Infinity,
         triggered: false,
         damage: opts.damage,
+        enemies,
       })
     },
   }
@@ -38,6 +39,29 @@ class Bullet extends Sprite {
   init(props) {
     super.init(props)
     this.opacity = 1
+  }
+
+  update() {
+    super.update()
+    // home in on nearby enemies
+    if (typeof this.dx === 'number' || typeof this.dy === 'number') {
+      const nearby = this.enemies.pool
+        .getAliveObjects()
+        .filter((e) => e.position.distance(this) < 200)
+        .sort(
+          (a, b) => a.position.distance(this) - b.position.distance(this),
+        )[0]
+      if (nearby) {
+        // TODO: check angle between target and our current trajectory
+        // only change if its small enough
+        const angle = angleToTarget(this, nearby)
+        const p = movePoint({ x: 0, y: 0 }, angle, 5)
+        this.dx = p.x
+        this.dy = p.y
+      }
+    }
+
+    if (this.x < 0 || this.y < 0 || this.x > 900 || this.y > 900) this.ttl = 0
   }
 
   draw() {

@@ -1,5 +1,5 @@
 export const LEVELS = [
-  { waves: [{ type: 'homer', count: 15, rate: 2000 }] },
+  { waves: [{ type: 'homer', count: 15, rate: 500 }] },
   { waves: [{ type: 'homer', count: 30, rate: 800 }] },
   { waves: [{ type: 'defender', count: 8, rate: 1000 }] },
   {

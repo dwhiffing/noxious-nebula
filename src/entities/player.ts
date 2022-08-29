@@ -52,7 +52,7 @@ export const Player = ({
     }
     const dur = Math.min(maxCharge, sprite.chargeDuration * 100)
     sprite.chargeDuration = -2
-    let opts = { x: sprite.x, y: sprite.y }
+    let opts = { x: sprite.x, y: sprite.y, enemies }
     let key = dur > _dur ? (sprite.speed > 3 ? 'shot' : 'blast') : 'mine'
     Object.entries(BULLET_STATS[key]).forEach(([k, v]) => {
       opts[k] = typeof v === 'function' ? v({ dur, sprite }) : v
