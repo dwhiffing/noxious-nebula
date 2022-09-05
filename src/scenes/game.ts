@@ -23,7 +23,7 @@ export const GameScene = ({ canvas, onWin }) => {
   let store = Store({ canvas, onNext: nextLevel })
   const x = canvas.width / 2
   const y = canvas.height / 2
-  let enemies = Enemies({ canvas, particles })
+  let enemies = Enemies({ canvas, particles, bullets })
   let player = Player({ canvas, x, y, bullets, store, enemies })
   const checkEnd = () => {
     setTimeout(() => {
@@ -47,8 +47,12 @@ export const GameScene = ({ canvas, onWin }) => {
     if (!p.isAlive()) onWin()
   }
 
+  const bulletPlayerCollide = (b, p) => {
+    b.die()
+    p.takeDamage(b.damage)
+  }
   const bulletEnemyCollide = (b, e) => {
-    if (b.triggered) return
+    if (b.triggered || b.isEnemyBullet) return
     // TODO: stat for mine explosion distance from player
     if (b.isMine && b.position.distance(player.sprite.position) < 100) return
     if (b.isMine) b.triggered = true
@@ -74,7 +78,7 @@ export const GameScene = ({ canvas, onWin }) => {
           b.takeDamage(e.health)
           e.takeDamage(b.damage)
         } else {
-          e.charge += b.health
+          e.addCharge(b.health)
           b.die()
         }
       }
@@ -100,6 +104,11 @@ export const GameScene = ({ canvas, onWin }) => {
         bullets.pool.getAliveObjects(),
         enemies.pool.getAliveObjects(),
         bulletEnemyCollide,
+      )
+      checkCollisions(
+        bullets.pool.getAliveObjects().filter((b: any) => b.isEnemyBullet),
+        [player.sprite],
+        bulletPlayerCollide,
       )
       checkCollisions(
         [player.sprite],

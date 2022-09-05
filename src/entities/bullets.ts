@@ -9,7 +9,7 @@ export const Bullets = () => {
   return {
     pool,
     spawn(opts) {
-      const { health, speed = 0, angle = 0, enemies } = opts
+      const { health, speed = 0, angle = 0, enemies, isEnemyBullet } = opts
       return pool.get({
         x: opts.x,
         y: opts.y,
@@ -29,6 +29,7 @@ export const Bullets = () => {
         enemies,
         maxHealth: health,
         health,
+        isEnemyBullet,
       })
     },
   }
@@ -55,26 +56,24 @@ class Bullet extends Sprite {
   update() {
     super.update()
     // home in on nearby enemies
-    if (this.dx !== 0 && this.dy !== 0) {
-      const nearby = this.enemies.pool
+    if (this.dx !== 0 && this.dy !== 0 && this.enemies) {
+      this.enemies.pool
         .getAliveObjects()
         .filter((e) => e.position.distance(this) < 100)
-        .sort(
-          (a, b) => a.position.distance(this) - b.position.distance(this),
-        )[0]
-      if (nearby) {
-        const angle = angleToTarget(this, nearby)
-        const distanceFactor = this.position.distance(nearby.position) / 50
-        const p = movePoint({ x: 0, y: 0 }, angle, distanceFactor)
-        this.dx += p.x
-        this.dy += p.y
+        .sort((a, b) => a.position.distance(this) - b.position.distance(this))
+        .forEach((nearby) => {
+          const angle = angleToTarget(this, nearby)
+          const distanceFactor = this.position.distance(nearby.position) / 500
+          const p = movePoint({ x: 0, y: 0 }, angle, distanceFactor)
+          this.dx += p.x
+          this.dy += p.y
 
-        // max speed
-        const maxSpeed = 10
-        const s = getSpeed(this.dx, this.dy)
-        this.dx = (this.dx / s) * maxSpeed
-        this.dy = (this.dy / s) * maxSpeed
-      }
+          // max speed
+          const maxSpeed = 10
+          const s = getSpeed(this.dx, this.dy)
+          this.dx = (this.dx / s) * maxSpeed
+          this.dy = (this.dy / s) * maxSpeed
+        })
     }
 
     if (this.x < 0 || this.y < 0 || this.x > 900 || this.y > 900) this.ttl = 0
@@ -83,16 +82,15 @@ class Bullet extends Sprite {
   draw() {
     if (this.ttl) this.opacity -= 1 / this.ttl
     const size = this.size
+    const red = this.isEnemyBullet || (this.isMine && this.triggered)
     gradient({
       x: this.width / 2 - size,
       y: this.width / 2 - size,
       ctx: this.context,
       r1: size - 1,
       r2: size,
-      c1: `rgba(120,${this.isMine && this.triggered ? '0,0' : '120,120'},${
-        this.opacity
-      })`,
-      c2: `rgba(120,${this.isMine && this.triggered ? '0,0' : '120,120'},0)`,
+      c1: `rgba(120,${red ? '0,0' : '120,120'},${this.opacity})`,
+      c2: `rgba(120,${red ? '0,0' : '120,120'},0)`,
     })
   }
 }

@@ -131,6 +131,22 @@ export class Enemy extends ShipSprite {
     super.draw()
   }
 
+  shoot() {
+    // TODO: move hard coded to constants
+    const bulletCount = 18
+    for (let i = 0; i < bulletCount; i++) {
+      this.bullets.spawn({
+        x: this.x + this.size / 2,
+        y: this.y + this.size / 2,
+        angle: ((Math.PI * 2) / bulletCount) * i - Math.PI,
+        damage: 10,
+        speed: 8,
+        size: 7,
+        isEnemyBullet: true,
+      })
+    }
+  }
+
   getNearbyEnemies() {
     return this.pool
       .getAliveObjects()

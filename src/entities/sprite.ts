@@ -5,6 +5,14 @@ export class Sprite extends SpriteClass {
     super(properties)
   }
 
+  addCharge(n) {
+    this.charge += n
+    if (this.charge >= this.maxCharge) {
+      this.shoot()
+      this.charge = 0
+    }
+  }
+
   takeDamage(n) {
     if (this.health <= 0) return
     if (this.shield > 0) {

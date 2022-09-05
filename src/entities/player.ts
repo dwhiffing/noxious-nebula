@@ -82,7 +82,7 @@ export const Player = ({
             if (e.type !== 'absorber') {
               e.takeDamage(bullet.damage)
             } else {
-              e.charge += bullet.damage
+              e.addCharge(bullet.damage)
             }
           })
       }, 100)
