@@ -3,7 +3,7 @@ import { movePoint, Pool, randInt } from 'kontra'
 import { ENEMY_STATS } from '../constants'
 
 const MAX_ENEMIES = 50
-export const Enemies = ({ canvas, particles, bullets }) => {
+export const Enemies = ({ canvas, particles, bullets, pickups }) => {
   let pool = Pool({ create: () => new Enemy(), maxSize: MAX_ENEMIES })
   let toSpawn = 0
   return {
@@ -46,8 +46,17 @@ export const Enemies = ({ canvas, particles, bullets }) => {
         setTimeout(
           () => {
             const ttl = Infinity
-            const stats = { x, y, ttl, target, pool, bullets, particles, type }
-            pool.get(stats)
+            pool.get({
+              x,
+              y,
+              ttl,
+              target,
+              pool,
+              bullets,
+              particles,
+              pickups,
+              type,
+            })
             toSpawn--
           },
           wall ? 0 : i * rate,

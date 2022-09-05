@@ -87,8 +87,8 @@ class Bullet extends Sprite {
       x: this.width / 2 - size,
       y: this.width / 2 - size,
       ctx: this.context,
-      r1: size - 1,
-      r2: size,
+      r1: Math.max(0, size - 1),
+      r2: Math.max(0, size),
       c1: `rgba(120,${red ? '0,0' : '120,120'},${this.opacity})`,
       c2: `rgba(120,${red ? '0,0' : '120,120'},0)`,
     })

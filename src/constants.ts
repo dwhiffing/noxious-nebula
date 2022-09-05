@@ -14,23 +14,84 @@ export const LEVELS = [
       { type: 'homer', count: 8, rate: 1000, delay: 5000 },
     ],
   },
-  {
-    waves: [{ type: 'absorber', count: 8, rate: 1000 }],
-  },
+  { waves: [{ type: 'absorber', count: 8, delay: 10, rate: 1000 }] },
   {
     waves: [
-      { type: 'defender', count: 8, rate: 1000 },
-      { type: 'absorber', count: 8, rate: 1000 },
+      { type: 'defender', count: 8, delay: 10, rate: 1000 },
+      { type: 'absorber', count: 8, delay: 10, rate: 1000 },
     ],
   },
   {
     waves: [
-      { type: 'defender', count: 8, rate: 1000 },
-      { type: 'absorber', count: 8, rate: 1000 },
-      { type: 'homer', count: 8, rate: 1000 },
+      { type: 'defender', count: 8, delay: 10, rate: 1000 },
+      { type: 'absorber', count: 8, delay: 10, rate: 1000 },
+      { type: 'homer', count: 8, delay: 10, rate: 1000 },
     ],
   },
   { waves: [{ type: 'spike', count: 16, rate: 1000 }] },
+]
+export const UPGRADES = [
+  {
+    description: (n: number) => `Lay more mines at once`,
+    key: 'mine_count',
+    label: 'More mines',
+    cost: [100, 200],
+  },
+  {
+    description: (n: number) =>
+      `Mines have larger explosions and do more damage`,
+    key: 'mine_damage',
+    label: 'Bigger mines',
+    cost: [100],
+  },
+  {
+    description: (n: number) => `Lay mines faster`,
+    key: 'mine_speed',
+    label: 'Faster mines',
+    cost: [100],
+  },
+  {
+    description: (n: number) => `Charge energy faster`,
+    key: 'charge_speed',
+    label: 'Faster charge',
+    cost: [100],
+  },
+  {
+    description: (n: number) => `Charge more energy before max`,
+    key: 'charge_max',
+    label: 'More charge',
+    cost: [100],
+  },
+  {
+    description: (n: number) => `More health`,
+    key: 'health_max',
+    label: 'More HP',
+    cost: [],
+  },
+  {
+    description: (n: number) => `More shield`,
+    key: 'shield_max',
+    label: 'More shield',
+    cost: [],
+  },
+  {
+    description: (n: number) => `Gain shield faster`,
+    key: 'shield_speed',
+    label: 'Faster shield',
+    cost: [],
+  },
+  {
+    description: (n: number) => `Description`,
+    key: 'shield_absorb',
+    label: 'Absorb',
+    cost: [],
+  },
+  {
+    description: (n: number) => `Description`,
+    key: 'bullet_count',
+    label: 'More bullets',
+    cost: [],
+  },
 ]
 
 interface EnemyStats {
@@ -47,6 +108,7 @@ interface EnemyStats {
   spikey?: boolean
   maxSpeed?: number
   friction?: number
+  value?: number
   maxTargetDistance?: number
   minTargetDistance?: number
 }
@@ -63,6 +125,7 @@ export const ENEMY_STATS: Record<string, EnemyStats> = {
     health: 10,
     damage: 10,
     separateAmount: 30,
+    value: 10,
   },
   big: {
     color: '#f00',
@@ -75,6 +138,7 @@ export const ENEMY_STATS: Record<string, EnemyStats> = {
     health: 40,
     damage: 20,
     separateAmount: 30,
+    value: 10,
   },
   defender: {
     color: '#0f0',
@@ -91,6 +155,7 @@ export const ENEMY_STATS: Record<string, EnemyStats> = {
     explodes: false,
     maxTargetDistance: 200,
     minTargetDistance: 100,
+    value: 10,
   },
   absorber: {
     color: '#ff0',
@@ -106,6 +171,7 @@ export const ENEMY_STATS: Record<string, EnemyStats> = {
     explodes: false,
     maxTargetDistance: 100,
     minTargetDistance: 60,
+    value: 10,
   },
   spike: {
     color: '#444',
@@ -118,6 +184,7 @@ export const ENEMY_STATS: Record<string, EnemyStats> = {
     collides: true,
     exhaust: false,
     explodes: false,
+    value: 10,
   },
 }
 
@@ -126,11 +193,10 @@ export const PLAYER_STATS = {
   speed: 4,
   size: 30,
   maxMines: 5,
-  mineLayRate: 1000,
   mineProximity: 20,
   chargeRate: 0.16,
-  maxCharge: 3000,
-  mineRate: 0.16,
+  maxCharge: 30,
+  mineRate: 0.2,
   health: 100,
   shield: 0,
   shieldChargeRate: 0.1,

@@ -187,6 +187,12 @@ export class Enemy extends ShipSprite {
   die() {
     const size = ENEMY_STATS[this.type || 'homer'].size
 
+    this.pickups.spawn({
+      x: this.x + size / 2,
+      y: this.y + size / 2,
+      value: this.value,
+    })
+
     // draw explosion
     this.particles.spawn({
       x: this.x + size / 2,

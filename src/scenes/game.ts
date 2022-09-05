@@ -6,6 +6,7 @@ import { Particles } from '../entities/particles'
 import { Store } from '../entities/store'
 import { LEVELS } from '../constants'
 import { angleToTarget, movePoint } from 'kontra'
+import { Pickups } from '../entities/pickups'
 
 export const GameScene = ({ canvas, onWin }) => {
   let bullets = Bullets()
@@ -20,11 +21,25 @@ export const GameScene = ({ canvas, onWin }) => {
     bullets.pool.clear()
     levelIndex++
   }
-  let store = Store({ canvas, onNext: nextLevel })
   const x = canvas.width / 2
   const y = canvas.height / 2
-  let enemies = Enemies({ canvas, particles, bullets })
-  let player = Player({ canvas, x, y, bullets, store, enemies })
+  let pickups = Pickups({ canvas })
+  let enemies = Enemies({ canvas, particles, bullets, pickups })
+  let player = Player({
+    canvas,
+    x,
+    y,
+    bullets,
+    getStoreActive: () => store.getActive(),
+    enemies,
+  })
+  let store = Store({
+    canvas,
+    onNext: nextLevel,
+    onPurchase: (upgrade) => player.buyUpgrade(upgrade),
+    getPlayer: () => player,
+  })
+
   const checkEnd = () => {
     setTimeout(() => {
       if (enemies.getRemaining() > 0) return
@@ -45,6 +60,11 @@ export const GameScene = ({ canvas, onWin }) => {
     checkEnd()
 
     if (!p.isAlive()) onWin()
+  }
+
+  const pickupPlayerCollide = (b, p) => {
+    b.die()
+    p.getMoney(b.value)
   }
 
   const bulletPlayerCollide = (b, p) => {
@@ -98,6 +118,7 @@ export const GameScene = ({ canvas, onWin }) => {
       player.update()
       enemies.pool.update()
       bullets.pool.update()
+      pickups.pool.update()
       particles.pool.update()
       store.update()
       checkCollisions(
@@ -111,6 +132,11 @@ export const GameScene = ({ canvas, onWin }) => {
         bulletPlayerCollide,
       )
       checkCollisions(
+        pickups.pool.getAliveObjects(),
+        [player.sprite],
+        pickupPlayerCollide,
+      )
+      checkCollisions(
         [player.sprite],
         enemies.pool.getAliveObjects(),
         playerEnemyCollide,
@@ -121,6 +147,7 @@ export const GameScene = ({ canvas, onWin }) => {
       particles.pool.render()
       enemies.pool.render()
       bullets.pool.render()
+      pickups.pool.render()
       store.render()
     },
   }
