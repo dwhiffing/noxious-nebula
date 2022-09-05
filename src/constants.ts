@@ -1,5 +1,5 @@
 export const LEVELS = [
-  { waves: [{ type: 'homer', count: 15, rate: 500 }] },
+  { waves: [{ type: 'homer', count: 15, rate: 2000 }] },
   { waves: [{ type: 'homer', count: 30, rate: 800 }] },
   { waves: [{ type: 'defender', count: 8, rate: 1000 }] },
   {
@@ -149,13 +149,14 @@ export const BULLET_STATS = {
     angle: ({ sprite }) => sprite.angle - 1.57,
     speed: ({ sprite }) => sprite.speed,
     size: ({ dur }) => dur / 250,
+    health: ({ dur }) => dur / 80,
     damage: 10,
   },
   blast: {
     triggerRadius: 45,
-    explodeRadius: 45,
     ttl: 30,
-    size: ({ dur }) => dur / 50,
+    explodeRadius: ({ dur }) => dur / 40,
+    size: ({ dur }) => dur / 40,
     damage: 10,
   },
 }

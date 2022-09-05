@@ -1,5 +1,5 @@
 import { angleToTarget, movePoint, Pool } from 'kontra'
-import { gradient } from '../utils'
+import { getSpeed, gradient } from '../utils'
 import { Sprite } from './sprite'
 
 const MAX_BULLETS = 50
@@ -9,7 +9,7 @@ export const Bullets = () => {
   return {
     pool,
     spawn(opts) {
-      const { speed = 0, angle = 0, enemies } = opts
+      const { health, speed = 0, angle = 0, enemies } = opts
       return pool.get({
         x: opts.x,
         y: opts.y,
@@ -19,6 +19,7 @@ export const Bullets = () => {
         dx: speed * Math.cos(angle),
         dy: speed * Math.sin(angle),
         size: opts.size || 0,
+        originalSize: opts.size || 0,
         explodeRadius: opts.explodeRadius || 0,
         triggerDuration: opts.triggerDuration || 0,
         isMine: opts.isMine || 0,
@@ -26,6 +27,8 @@ export const Bullets = () => {
         triggered: false,
         damage: opts.damage,
         enemies,
+        maxHealth: health,
+        health,
       })
     },
   }
@@ -41,6 +44,14 @@ class Bullet extends Sprite {
     this.opacity = 1
   }
 
+  takeDamage(amount) {
+    super.takeDamage(amount)
+    const f = Math.max((this.health / this.maxHealth) * this.originalSize, 0)
+    this.size = f
+    this.width = f
+    this.height = f
+  }
+
   update() {
     super.update()
     // home in on nearby enemies
@@ -52,12 +63,16 @@ class Bullet extends Sprite {
           (a, b) => a.position.distance(this) - b.position.distance(this),
         )[0]
       if (nearby) {
-        // TODO: check angle between target and our current trajectory
-        // only change if its small enough
         const angle = angleToTarget(this, nearby)
-        const p = movePoint({ x: 0, y: 0 }, angle, 5)
-        this.dx = p.x
-        this.dy = p.y
+        const distanceFactor = this.position.distance(nearby.position) / 1000
+        const p = movePoint({ x: 0, y: 0 }, angle, distanceFactor)
+        this.dx += p.x
+        this.dy += p.y
+
+        // max speed
+        const s = getSpeed(this.dx, this.dy)
+        this.dx = (this.dx / s) * 5
+        this.dy = (this.dy / s) * 5
       }
     }
 

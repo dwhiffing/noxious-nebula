@@ -54,8 +54,6 @@ export const GameScene = ({ canvas, onWin }) => {
     if (b.isMine) b.triggered = true
     // TODO: refactor me
     setTimeout(() => {
-      // bullets should only die when theyve got no energy?
-
       if (b.explodeRadius) {
         if (b.isMine) {
           b.die()
@@ -66,15 +64,19 @@ export const GameScene = ({ canvas, onWin }) => {
             opacity: 0.9,
             ttl: 40,
           })
+          enemies.pool
+            .getAliveObjects()
+            .filter((e) => distance(e, b) < b.explodeRadius)
+            .forEach((e: any) => e.takeDamage(b.damage))
         }
-        enemies.pool
-          .getAliveObjects()
-          .filter((e) => distance(e, b) < b.explodeRadius)
-          .forEach((e: any) => e.takeDamage(b.damage))
       } else {
-        // TODO: calculate damge?
-
-        e.takeDamage(b.damage)
+        if (e.type !== 'absorber') {
+          b.takeDamage(e.health, e)
+          e.takeDamage(b.damage)
+        } else {
+          // TODO: absorb shot
+          b.die()
+        }
       }
       checkEnd()
     }, b.triggerDuration)

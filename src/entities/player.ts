@@ -1,6 +1,6 @@
 import { angleToTarget, onPointer } from 'kontra'
 import { BULLET_STATS, PLAYER_STATS } from '../constants'
-import { checkCollisionsBool, getSpeed } from '../utils'
+import { checkCollisionsBool, distance, getSpeed } from '../utils'
 import { ShipSprite } from './sprite'
 
 const MINE_CLICK_DURATION = 250
@@ -71,7 +71,15 @@ export const Player = ({
     }
 
     const bullet = bullets.spawn(opts)
-    if (key === 'blast') setTimeout(() => (bullet.triggered = true), 50)
+    if (key === 'blast') {
+      setTimeout(() => {
+        bullet.triggered = true
+        enemies.pool
+          .getAliveObjects()
+          .filter((e) => distance(e, bullet) < bullet.explodeRadius)
+          .forEach((e: any) => e.takeDamage(bullet.damage))
+      }, 100)
+    }
   })
 
   const moveCallback = (e) => {
