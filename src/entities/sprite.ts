@@ -80,8 +80,8 @@ export class ShipSprite extends Sprite {
     this.context.beginPath()
     this.context.moveTo(o, o)
     this.context.fillStyle = '#0ff'
-    const c = this.chargeDuration > 0 ? this.chargeDuration : 0
-    const f2 = 360 * (c / 30)
+    const c = this.charge > 0 ? this.charge : 0
+    const f2 = 360 * (c / this.maxCharge)
     this.context.arc(o, o, w / 2, getRads(-90), getRads(f2 - 90))
     this.context.closePath()
     this.context.fill()

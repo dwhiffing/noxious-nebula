@@ -155,8 +155,8 @@ export const BULLET_STATS = {
   blast: {
     triggerRadius: 45,
     ttl: 30,
-    explodeRadius: ({ dur }) => dur / 40,
+    explodeRadius: ({ dur }) => dur / 30,
     size: ({ dur }) => dur / 40,
-    damage: 10,
+    damage: ({ dur }) => dur / 200,
   },
 }

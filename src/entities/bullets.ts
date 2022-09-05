@@ -58,21 +58,22 @@ class Bullet extends Sprite {
     if (this.dx !== 0 && this.dy !== 0) {
       const nearby = this.enemies.pool
         .getAliveObjects()
-        .filter((e) => e.position.distance(this) < 200)
+        .filter((e) => e.position.distance(this) < 100)
         .sort(
           (a, b) => a.position.distance(this) - b.position.distance(this),
         )[0]
       if (nearby) {
         const angle = angleToTarget(this, nearby)
-        const distanceFactor = this.position.distance(nearby.position) / 1000
+        const distanceFactor = this.position.distance(nearby.position) / 50
         const p = movePoint({ x: 0, y: 0 }, angle, distanceFactor)
         this.dx += p.x
         this.dy += p.y
 
         // max speed
+        const maxSpeed = 10
         const s = getSpeed(this.dx, this.dy)
-        this.dx = (this.dx / s) * 5
-        this.dy = (this.dy / s) * 5
+        this.dx = (this.dx / s) * maxSpeed
+        this.dy = (this.dy / s) * maxSpeed
       }
     }
 

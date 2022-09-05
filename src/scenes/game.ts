@@ -71,10 +71,10 @@ export const GameScene = ({ canvas, onWin }) => {
         }
       } else {
         if (e.type !== 'absorber') {
-          b.takeDamage(e.health, e)
+          b.takeDamage(e.health)
           e.takeDamage(b.damage)
         } else {
-          // TODO: absorb shot
+          e.charge += b.health
           b.die()
         }
       }

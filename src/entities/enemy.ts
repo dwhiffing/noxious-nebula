@@ -15,6 +15,8 @@ export class Enemy extends ShipSprite {
       width: stats.size,
       height: stats.size,
       maxHealth: stats.health,
+      charge: 0,
+      maxCharge: 30,
       ...stats,
       ...properties,
     })

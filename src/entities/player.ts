@@ -34,7 +34,8 @@ export const Player = ({
     height: size,
     health: health,
     maxHealth: health,
-    chargeDuration: -2,
+    charge: -2,
+    maxCharge: 30,
     mineDuration: 0,
     shield: shield,
   })
@@ -50,8 +51,8 @@ export const Player = ({
     if (canvas !== document.pointerLockElement) {
       return canvas.requestPointerLock()
     }
-    const dur = Math.min(maxCharge, sprite.chargeDuration * 100)
-    sprite.chargeDuration = -2
+    const dur = Math.min(maxCharge, sprite.charge * 100)
+    sprite.charge = -2
     let opts = { x: sprite.x, y: sprite.y, enemies }
     let key = dur > _dur ? (sprite.speed > 3 ? 'shot' : 'blast') : 'mine'
     Object.entries(BULLET_STATS[key]).forEach(([k, v]) => {
@@ -77,7 +78,13 @@ export const Player = ({
         enemies.pool
           .getAliveObjects()
           .filter((e) => distance(e, bullet) < bullet.explodeRadius)
-          .forEach((e: any) => e.takeDamage(bullet.damage))
+          .forEach((e: any) => {
+            if (e.type !== 'absorber') {
+              e.takeDamage(bullet.damage)
+            } else {
+              e.charge += bullet.damage
+            }
+          })
       }, 100)
     }
   })
@@ -128,7 +135,7 @@ export const Player = ({
       sprite.dx *= 0.7
       sprite.dy *= 0.7
       if (sprite.shield > 0) sprite.shield += shieldChargeRate
-      if (isDown) sprite.chargeDuration += chargeRate
+      if (isDown) sprite.charge += chargeRate
       if (sprite.mineDuration > 0) sprite.mineDuration -= mineRate
     },
     shutdown() {
