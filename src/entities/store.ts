@@ -1,6 +1,7 @@
 import { Text, Sprite, track } from 'kontra'
 import { UPGRADES } from '../constants'
 
+// TODO: refactor
 export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
   let active = false
   const background = Sprite({

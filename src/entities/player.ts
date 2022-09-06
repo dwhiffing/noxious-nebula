@@ -18,6 +18,7 @@ interface PlayerUpgrades {
   bullet_count?: number
 }
 
+// TODO: refactor
 export const Player = ({
   canvas,
   x: originX,

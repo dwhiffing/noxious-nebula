@@ -12,6 +12,7 @@ export const Enemies = ({ canvas, particles, bullets, pickups }) => {
       return toSpawn + pool.getAliveObjects().length
     },
     spawn(target, wave) {
+      // TODO: refactor
       let { type = 'homer', count = 1, rate = 0, circular, wall, dir } = wave
       toSpawn += count
       dir = dir ?? randInt(0, 3)

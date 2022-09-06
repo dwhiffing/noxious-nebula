@@ -23,8 +23,8 @@ const startWin = () => {
   scene = WinScene({ canvas, onNew: startGame })
 }
 
-// startGame()
-startMenu()
+startGame()
+// startMenu()
 
 GameLoop({
   update: (...rest) => scene && scene.update(...rest),

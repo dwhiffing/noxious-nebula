@@ -76,7 +76,7 @@ export const GameScene = ({ canvas, onWin }) => {
     // TODO: stat for mine explosion distance from player
     if (b.isMine && b.position.distance(player.sprite.position) < 100) return
     if (b.isMine) b.triggered = true
-    // TODO: refactor me
+    // TODO: refactor
     setTimeout(() => {
       if (b.explodeRadius) {
         if (b.isMine) {
