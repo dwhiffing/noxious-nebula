@@ -1,5 +1,5 @@
 import { init, initPointer, GameLoop } from 'kontra'
-import { GameScene, MenuScene, WinScene } from './scenes'
+import MUSIC from './music'
 import './zzfx'
 
 const { canvas } = init()
@@ -7,6 +7,9 @@ const { canvas } = init()
 initPointer()
 
 let scene
+
+//@ts-ignore
+zzfxP(...zzfxM(...MUSIC))
 
 const startGame = () => {
   scene && scene.shutdown()
