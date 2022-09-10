@@ -19,7 +19,7 @@ export default {
     kontra({
       gameObject: { velocity: true, anchor: true, group: true, ttl: true },
       sprite: { animation: false },
-      text: { textAlign: true },
+      text: { textAlign: true, newline: true },
       vector: {
         add: true,
         dot: true,
