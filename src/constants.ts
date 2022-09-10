@@ -194,7 +194,7 @@ export const PLAYER_STATS = {
   size: 30,
   maxMines: 5,
   mineProximity: 20,
-  chargeRate: 0.16,
+  chargeRate: 0.25,
   maxCharge: 30,
   mineRate: 0.2,
   health: 100,

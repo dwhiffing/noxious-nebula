@@ -1,4 +1,5 @@
 import { Text, Sprite, track } from 'kontra'
+import { playSound } from '../utils'
 import { UPGRADES } from '../constants'
 
 // TODO: refactor
@@ -53,6 +54,7 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
     anchor: { x: 0.5, y: 0.5 },
     onDown() {
       this.color = 'rgba(255,255,255,0'
+      playSound('click')
       buttons.forEach((b) => {
         if (b.isLabel) b.color = 'white'
       })
@@ -92,6 +94,8 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
     onDown() {
       active = false
       canvas.requestPointerLock()
+      playSound('nextLevel')
+
       onNext()
     },
   })
@@ -107,6 +111,7 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
       const upgrades = getPlayer().upgrades
       const key = upgrade.key
       if (!upgrade.cost[upgrades[key]]) return
+      playSound('click')
       buttons.forEach((b) => {
         if (b.isLabel && b.color === 'red') b.color = 'white'
       })

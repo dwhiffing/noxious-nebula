@@ -1,5 +1,11 @@
 import { movePoint, angleToTarget, randInt } from 'kontra'
-import { checkCollisionsBool, distance, getSpeed, wrapNumber } from '../utils'
+import {
+  checkCollisionsBool,
+  distance,
+  getSpeed,
+  playSound,
+  wrapNumber,
+} from '../utils'
 import { ENEMY_STATS } from '../constants'
 import { ShipSprite } from './sprite'
 
@@ -187,12 +193,13 @@ export class Enemy extends ShipSprite {
   die() {
     const size = ENEMY_STATS[this.type || 'homer'].size
 
+    playSound('enemyExplode')
+
     this.pickups.spawn({
       x: this.x + size / 2,
       y: this.y + size / 2,
       value: this.value,
     })
-
     // draw explosion
     this.particles.spawn({
       x: this.x + size / 2,
@@ -200,6 +207,7 @@ export class Enemy extends ShipSprite {
       size,
       ttl: 20,
     })
+
     super.die()
   }
 }

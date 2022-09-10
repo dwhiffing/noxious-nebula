@@ -82,15 +82,28 @@ class Bullet extends Sprite {
   draw() {
     if (this.ttl) this.opacity -= 1 / this.ttl
     const size = this.size
-    const red = this.isEnemyBullet || (this.isMine && this.triggered)
+    let r = 120
+    let g = 120
+    let b = 120
+    if (this.isEnemyBullet || (this.isMine && this.triggered)) {
+      g = 0
+      b = 0
+    }
+    if (!this.isMine && !this.isEnemyBullet) {
+      b = 250
+      g = 250
+      r = 0
+    }
+    let c1 = `rgba(${r},${g},${b},${this.opacity})`
+    let c2 = `rgba(${r},${g},${b},0)`
     gradient({
       x: this.width / 2 - size,
       y: this.width / 2 - size,
       ctx: this.context,
       r1: Math.max(0, size - 1),
       r2: Math.max(0, size),
-      c1: `rgba(120,${red ? '0,0' : '120,120'},${this.opacity})`,
-      c2: `rgba(120,${red ? '0,0' : '120,120'},0)`,
+      c1,
+      c2,
     })
   }
 }

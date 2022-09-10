@@ -104,19 +104,19 @@ export class ShipSprite extends Sprite {
       this.context.stroke()
     }
 
-    // debug line
-    this.context.lineWidth = 1
-    this.context.strokeStyle = '#0f0'
+    // // debug line
+    // this.context.lineWidth = 1
+    // this.context.strokeStyle = '#0f0'
 
-    const p = movePoint(
-      { x: this.width / 2, y: this.width / 2 },
-      this.angle || 0,
-      10,
-    )
-    this.context.beginPath()
-    this.context.moveTo(this.width / 2, this.width / 2)
-    this.context.lineTo(p.x, p.y)
-    this.context.stroke()
+    // const p = movePoint(
+    //   { x: this.width / 2, y: this.width / 2 },
+    //   this.angle || 0,
+    //   10,
+    // )
+    // this.context.beginPath()
+    // this.context.moveTo(this.width / 2, this.width / 2)
+    // this.context.lineTo(p.x, p.y)
+    // this.context.stroke()
   }
 }
 

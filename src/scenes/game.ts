@@ -1,11 +1,11 @@
 import { Enemies } from '../entities/enemies'
 import { Player } from '../entities/player'
 import { Bullets } from '../entities/bullets'
-import { checkCollisions, distance, wrapNumber } from '../utils'
+import { checkCollisions, distance, playSound, wrapNumber } from '../utils'
 import { Particles } from '../entities/particles'
 import { Store } from '../entities/store'
 import { LEVELS } from '../constants'
-import { angleToTarget, movePoint } from 'kontra'
+import { angleToTarget, movePoint, randInt } from 'kontra'
 import { Pickups } from '../entities/pickups'
 
 export const GameScene = ({ canvas, onWin }) => {
@@ -42,7 +42,13 @@ export const GameScene = ({ canvas, onWin }) => {
 
   const checkEnd = () => {
     setTimeout(() => {
-      if (enemies.getRemaining() > 0) return
+      if (
+        enemies.getRemaining() > 0 ||
+        player.sprite.health <= 0 ||
+        store.getActive()
+      )
+        return
+      playSound('playerWin')
       store.setActive(true)
     }, 500)
   }
@@ -55,15 +61,20 @@ export const GameScene = ({ canvas, onWin }) => {
       p.dx = pos.x
       p.dy = pos.y
       if (e.explodes) e.die()
+      playSound('playerHit')
       p.takeDamage(e.damage)
     }
     checkEnd()
 
-    if (!p.isAlive()) onWin()
+    if (!p.isAlive()) {
+      playSound('playerDie')
+      onWin()
+    }
   }
 
   const pickupPlayerCollide = (b, p) => {
     b.die()
+    playSound('pickup')
     p.getMoney(b.value)
   }
 
@@ -81,6 +92,8 @@ export const GameScene = ({ canvas, onWin }) => {
       if (b.explodeRadius) {
         if (b.isMine) {
           b.die()
+          playSound('mineExplode')
+
           particles.spawn({
             x: b.x,
             y: b.y,
@@ -91,7 +104,9 @@ export const GameScene = ({ canvas, onWin }) => {
           enemies.pool
             .getAliveObjects()
             .filter((e) => distance(e, b) < b.explodeRadius)
-            .forEach((e: any) => e.takeDamage(b.damage))
+            .forEach((e: any) =>
+              setTimeout(() => e.takeDamage(b.damage), randInt(10, 200)),
+            )
         }
       } else {
         if (e.type !== 'absorber') {
@@ -143,11 +158,11 @@ export const GameScene = ({ canvas, onWin }) => {
       )
     },
     render() {
-      player.sprite.render()
-      particles.pool.render()
-      enemies.pool.render()
       bullets.pool.render()
       pickups.pool.render()
+      particles.pool.render()
+      player.sprite.render()
+      enemies.pool.render()
       store.render()
     },
   }
