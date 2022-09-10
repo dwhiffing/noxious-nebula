@@ -1,4 +1,5 @@
 import { movePoint, SpriteClass } from 'kontra'
+import { playSound } from '../utils'
 
 export class Sprite extends SpriteClass {
   constructor(properties) {
@@ -8,14 +9,15 @@ export class Sprite extends SpriteClass {
   addCharge(n) {
     this.charge += n
     if (this.charge >= this.maxCharge) {
+      playSound('enemyShoot')
       this.shoot()
       this.charge = 0
     }
   }
 
-  takeDamage(n) {
+  takeDamage(n, ignoreShield = false) {
     if (this.health <= 0) return
-    if (this.shield > 0) {
+    if (this.shield > 0 && !ignoreShield) {
       if (n > this.shield) {
         n -= this.shield
         this.shield = 0
@@ -87,7 +89,7 @@ export class ShipSprite extends Sprite {
     // energy
     this.context.beginPath()
     this.context.moveTo(o, o)
-    this.context.fillStyle = '#0ff'
+    this.context.fillStyle = this.isPlayer ? '#0ff' : '#a00'
     const c = this.charge > 0 ? this.charge : 0
     const f2 = 360 * (c / this.maxCharge)
     this.context.arc(o, o, w / 2, getRads(-90), getRads(f2 - 90))
@@ -95,6 +97,9 @@ export class ShipSprite extends Sprite {
     this.context.fill()
 
     // energy
+    if (this.type === 'defender') {
+      this.shield = 100
+    }
     if (this.shield > 0) {
       this.context.beginPath()
       this.context.lineWidth = 3

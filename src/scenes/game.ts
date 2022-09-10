@@ -80,6 +80,7 @@ export const GameScene = ({ canvas, onWin }) => {
 
   const bulletPlayerCollide = (b, p) => {
     b.die()
+    playSound('playerHit')
     p.takeDamage(b.damage)
   }
   const bulletEnemyCollide = (b, e) => {
@@ -103,15 +104,19 @@ export const GameScene = ({ canvas, onWin }) => {
           })
           enemies.pool
             .getAliveObjects()
-            .filter((e) => distance(e, b) < b.explodeRadius)
-            .forEach((e: any) =>
-              setTimeout(() => e.takeDamage(b.damage), randInt(10, 200)),
-            )
+            .filter((e: any) => distance(e, b) < b.explodeRadius)
+            .forEach((e: any) => {
+              if (e.type === 'defender') {
+                playSound('shieldHit')
+              } else {
+                setTimeout(() => e.takeDamage(b.damage), randInt(10, 200))
+              }
+            })
         }
       } else {
         if (e.type !== 'absorber') {
           b.takeDamage(e.health)
-          e.takeDamage(b.damage)
+          e.takeDamage(b.damage, true)
         } else {
           e.addCharge(b.health)
           b.die()

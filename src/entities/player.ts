@@ -64,7 +64,7 @@ export const Player = ({
     sprite.shouldPlayChargeSound = true
     sprite.shouldPlayChargeFullSound = true
   })
-
+  sprite.isPlayer = true
   onPointer('up', () => {
     isDown = false
     if (getStoreActive()) return
@@ -105,11 +105,7 @@ export const Player = ({
           .getAliveObjects()
           .filter((e) => distance(e, bullet) < bullet.explodeRadius)
           .forEach((e: any) => {
-            if (e.type !== 'absorber') {
-              e.takeDamage(bullet.damage)
-            } else {
-              e.addCharge(bullet.damage)
-            }
+            e.takeDamage(bullet.damage)
           })
       }, 100)
     }

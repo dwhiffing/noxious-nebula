@@ -57,23 +57,30 @@ class Bullet extends Sprite {
     super.update()
     // home in on nearby enemies
     if (this.dx !== 0 && this.dy !== 0 && this.enemies) {
-      this.enemies.pool
+      const first = this.enemies.pool
         .getAliveObjects()
-        .filter((e) => e.position.distance(this) < 100)
-        .sort((a, b) => a.position.distance(this) - b.position.distance(this))
-        .forEach((nearby) => {
-          const angle = angleToTarget(this, nearby)
-          const distanceFactor = this.position.distance(nearby.position) / 500
-          const p = movePoint({ x: 0, y: 0 }, angle, distanceFactor)
-          this.dx += p.x
-          this.dy += p.y
+        .filter(
+          (e) =>
+            e.position.distance(this) < (e.type === 'absorber' ? 200 : 100),
+        )
+        .sort(
+          (a, b) => a.position.distance(this) - b.position.distance(this),
+        )[0]
+      if (first) {
+        const angle = angleToTarget(this, first)
+        const distanceFactor =
+          this.position.distance(first.position) /
+          (first.type === 'absorber' ? 10 : 50)
+        const p = movePoint({ x: 0, y: 0 }, angle, distanceFactor)
+        this.dx += p.x
+        this.dy += p.y
 
-          // max speed
-          const maxSpeed = 10
-          const s = getSpeed(this.dx, this.dy)
-          this.dx = (this.dx / s) * maxSpeed
-          this.dy = (this.dy / s) * maxSpeed
-        })
+        // max speed
+        const maxSpeed = 10
+        const s = getSpeed(this.dx, this.dy)
+        this.dx = (this.dx / s) * maxSpeed
+        this.dy = (this.dy / s) * maxSpeed
+      }
     }
 
     if (this.x < 0 || this.y < 0 || this.x > 900 || this.y > 900) this.ttl = 0
