@@ -8,7 +8,7 @@ import { LEVELS } from '../constants'
 import { angleToTarget, movePoint, randInt } from 'kontra'
 import { Pickups } from '../entities/pickups'
 
-export const GameScene = ({ canvas, onWin }) => {
+export const GameScene = ({ canvas, onWin, onLose }) => {
   let bullets = Bullets()
   let particles = Particles()
   let levelIndex = 0
@@ -48,6 +48,9 @@ export const GameScene = ({ canvas, onWin }) => {
         store.getActive()
       )
         return
+
+      let level = LEVELS[levelIndex]
+      if (!level) return onWin()
       playSound('playerWin')
       store.setActive(true)
     }, 500)
@@ -68,7 +71,7 @@ export const GameScene = ({ canvas, onWin }) => {
 
     if (!p.isAlive()) {
       playSound('playerDie')
-      onWin()
+      onLose()
     }
   }
 

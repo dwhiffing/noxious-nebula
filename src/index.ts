@@ -25,8 +25,7 @@ const startHelp = () => {
 
 const startGame = () => {
   scene && scene.shutdown()
-
-  scene = GameScene({ canvas, onWin: startWin })
+  scene = GameScene({ canvas, onWin: startWin, onLose: startLose })
 }
 
 const startMenu = () => {
@@ -41,11 +40,23 @@ const startMenu = () => {
 }
 
 const startWin = () => {
+  document.exitPointerLock()
   scene && scene.shutdown()
   scene = MenuScene({
     canvas,
     heading: 'Win',
     description: 'Win',
+    button1: startGame,
+  })
+}
+
+const startLose = () => {
+  document.exitPointerLock()
+  scene && scene.shutdown()
+  scene = MenuScene({
+    canvas,
+    heading: 'Game over',
+    description: 'you lose',
     button1: startGame,
   })
 }
