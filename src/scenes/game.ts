@@ -2,6 +2,7 @@ import { Enemies } from '../entities/enemies'
 import { Player } from '../entities/player'
 import { Bullets } from '../entities/bullets'
 import { checkCollisions, distance, playSound, wrapNumber } from '../utils'
+import { requestTimeout } from '../utils'
 import { Particles } from '../entities/particles'
 import { Store } from '../entities/store'
 import { LEVELS } from '../constants'
@@ -18,7 +19,7 @@ export const GameScene = ({ canvas, onWin, onLose }) => {
     player.sprite.health = 100
     let level = LEVELS[levelIndex]
     level.waves.forEach((wave) =>
-      setTimeout(() => enemies.spawn(player.sprite, wave), wave.delay || 0),
+      requestTimeout(() => enemies.spawn(player.sprite, wave), wave.delay || 0),
     )
     bullets.pool.clear()
     levelIndex++
@@ -51,13 +52,13 @@ export const GameScene = ({ canvas, onWin, onLose }) => {
       )
         return
       endTriggered = true
-      setTimeout(() => {
+      requestTimeout(() => {
         let level = LEVELS[levelIndex]
         if (!level) return onWin(player.sprite.money)
         playSound('playerWin')
         store.setActive(true)
         bullets.pool.clear()
-      }, 2000)
+      }, 1500)
     }, 500)
   }
 

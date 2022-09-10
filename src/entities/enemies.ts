@@ -1,6 +1,7 @@
 import { Enemy } from './enemy'
 import { movePoint, Pool, randInt } from 'kontra'
 import { ENEMY_STATS } from '../constants'
+import { requestTimeout } from '../utils'
 
 const MAX_ENEMIES = 50
 export const Enemies = ({ canvas, particles, bullets, pickups }) => {
@@ -44,7 +45,7 @@ export const Enemies = ({ canvas, particles, bullets, pickups }) => {
             if (dir === 3) y = canvas.height + b
           }
         }
-        setTimeout(
+        requestTimeout(
           () => {
             const ttl = Infinity
             pool.get({

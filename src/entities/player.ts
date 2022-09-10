@@ -107,7 +107,7 @@ export const Player = ({
           .forEach((e: any) => {
             e.takeDamage(bullet.damage)
           })
-      }, 100)
+      }, 50)
     }
     if (key === 'shot') {
       playSound('playerShoot', 0.5 + sprite.charge / sprite.maxCharge)

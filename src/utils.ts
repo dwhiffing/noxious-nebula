@@ -71,3 +71,18 @@ export const getSpeed = (x, y) => Math.sqrt(x * x + y * y)
 
 export const distance = (a, b) =>
   Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y))
+
+let focused = true
+window.addEventListener('focus', () => (focused = true))
+window.addEventListener('blur', () => (focused = false))
+export const requestTimeout = (fn, delay) => {
+  let _delay = delay / 10
+
+  const loop = () => {
+    if (focused) _delay -= 1
+    if (_delay <= 0) return fn()
+    requestAnimationFrame(loop)
+  }
+
+  requestAnimationFrame(loop)
+}
