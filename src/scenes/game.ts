@@ -12,7 +12,9 @@ export const GameScene = ({ canvas, onWin, onLose }) => {
   let bullets = Bullets()
   let particles = Particles()
   let levelIndex = 0
+  let endTriggered = false
   const nextLevel = () => {
+    endTriggered = false
     player.sprite.health = 100
     let level = LEVELS[levelIndex]
     level.waves.forEach((wave) =>
@@ -45,14 +47,17 @@ export const GameScene = ({ canvas, onWin, onLose }) => {
       if (
         enemies.getRemaining() > 0 ||
         player.sprite.health <= 0 ||
-        store.getActive()
+        endTriggered
       )
         return
-
-      let level = LEVELS[levelIndex]
-      if (!level) return onWin()
-      playSound('playerWin')
-      store.setActive(true)
+      endTriggered = true
+      setTimeout(() => {
+        let level = LEVELS[levelIndex]
+        if (!level) return onWin(player.sprite.money)
+        playSound('playerWin')
+        store.setActive(true)
+        bullets.pool.clear()
+      }, 2000)
     }, 500)
   }
 

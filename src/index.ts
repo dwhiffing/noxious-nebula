@@ -19,10 +19,10 @@ const startHelp = () => {
     canvas,
     heading: 'How to play',
     texts: [
-      'Move your mouse to control your bot.\n\nClick to drop a mine or hold to charge up energy.\n\nRelease energy while moving to fire a homing blast\nor while stationary for a burst around you',
+      'A rogue AI has sent an army to\nplunder your homeworld for resources.\n\nYou are one of the few survivors,\nProtect it at all costs!',
+      'Mouse controls your ship.\n\nClick to drop mines or hold to charge energy.\n\nRelease while moving to fire blasts\nor while still for a burst',
       "You can only place a few mines at once to start\n\nMines won't explode if you are too close\n\nMines must be placed at least a few feet apart",
-      'Use mines and energy to destroy your enemies\n\nPick up the money they drop and upgrade your bot between levels\n\nTry to make it through all the waves!',
-      'Red enemies will home in on you and explode\n\nGreen enemies are immune to mines, but vulnerable to energy.\nThey can shield nearby foes from mines\n\nYellow enemies can absorb your blasts, but are weak to mines and bursts\n\nGray enemies will bounce around and damage you if you touch them.\nThey are tough to kill',
+      'Red enemies home in and explode\n\nGreen enemies shield themselves and nearby foes from mines, but not energy\n\nYellow enemies absorb blasts, but not mines and bursts',
     ],
     button1: startGame,
   })
@@ -44,13 +44,13 @@ const startMenu = () => {
   })
 }
 
-const startWin = () => {
+const startWin = (finalMoney) => {
   document.exitPointerLock()
   scene && scene.shutdown()
   scene = MenuScene({
     canvas,
-    heading: 'Win',
-    description: 'Win',
+    heading: 'Congratulations',
+    description: `You cleaned out the Noxious Nebula!\nYour final cash total was: $${finalMoney}`,
     button1: startGame,
   })
 }
@@ -60,8 +60,8 @@ const startLose = () => {
   scene && scene.shutdown()
   scene = MenuScene({
     canvas,
-    heading: 'Game over',
-    description: 'you lose',
+    heading: 'Game Over',
+    description: 'You sealed the fate of the Noxious Nebula.',
     button1: startGame,
   })
 }

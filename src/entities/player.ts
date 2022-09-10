@@ -147,7 +147,7 @@ export const Player = ({
   }
 
   document.addEventListener('pointerlockchange', changeCallback, false)
-  sprite.money = 10000
+  sprite.money = 0
   sprite.getMoney = (amount) => {
     sprite.money += amount
   }
