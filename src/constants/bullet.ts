@@ -1,6 +1,7 @@
 export const BULLET_STATS = {
   mine: {
-    size: 4,
+    size: 7,
+    innerSize: 6,
     triggerRadius: 45,
     triggerDuration: 300,
     explodeRadius: 50,

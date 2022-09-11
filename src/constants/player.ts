@@ -1,7 +1,7 @@
 export const PLAYER_STATS = {
   mineClickDuration: 250,
   speed: 4,
-  size: 30,
+  size: 35,
   maxMines: 5,
   mineProximity: 20,
   chargeRate: 0.25,

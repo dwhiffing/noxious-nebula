@@ -19,6 +19,7 @@ export const Bullets = () => {
         dx: speed * Math.cos(angle),
         dy: speed * Math.sin(angle),
         size: opts.size || 0,
+        innerSize: opts.innerSize,
         originalSize: opts.size || 0,
         explodeRadius: opts.explodeRadius || 0,
         triggerDuration: opts.triggerDuration || 0,
@@ -92,7 +93,13 @@ class Bullet extends Sprite {
     let r = 120
     let g = 120
     let b = 120
+    if (this.isMine) {
+      r = 10
+      g = 150
+      b = 250
+    }
     if (this.isEnemyBullet || (this.isMine && this.triggered)) {
+      r = 250
       g = 0
       b = 0
     }
@@ -107,10 +114,17 @@ class Bullet extends Sprite {
       x: this.width / 2 - size,
       y: this.width / 2 - size,
       ctx: this.context,
-      r1: Math.max(0, size - 1),
+      r1: Math.max(0, this.innerSize || this.width / 2),
       r2: Math.max(0, size),
       c1,
       c2,
     })
+    if (this.isMine) {
+      this.context.beginPath()
+      this.context.fillStyle = '#b00'
+      this.context.arc(this.width / 2, this.width / 2, 2, 0, 2 * Math.PI)
+      this.context.closePath()
+      this.context.fill()
+    }
   }
 }
