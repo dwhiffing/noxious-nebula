@@ -8,8 +8,8 @@ export const MenuScene = ({
   button1,
   button2,
 }: any) => {
-  const width = canvas.clientWidth
-  const height = canvas.clientHeight
+  const width = canvas.width
+  const height = canvas.height
   let i = 0
   let text = Text({
     text: heading,

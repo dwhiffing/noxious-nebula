@@ -16,7 +16,7 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
   let selected = null
 
   const moneyText = Text({
-    x: canvas.width - 200,
+    x: canvas.width / 2 + 150,
     y: 90,
     text: '',
     color: 'rgba(255,255,255,1)',
@@ -26,7 +26,7 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
   buttons.push(moneyText)
 
   const costText = Text({
-    x: 200,
+    x: canvas.width / 2 - 150,
     y: 90,
     text: '',
     color: 'rgba(255,255,255,0)',
