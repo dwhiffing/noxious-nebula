@@ -26,9 +26,9 @@ class Pickup extends SpriteClass {
 
   draw() {
     if (this.ttl) this.opacity -= 1 / this.ttl
-    this.context.fillStyle = `rgba(255,255,0,${this.opacity})`
+    this.context.fillStyle = `rgba(255,200,0,${this.opacity})`
     this.context.beginPath()
-    this.context.arc(0, 0, 5, 0, 2 * Math.PI)
+    this.context.arc(0, 0, 3.5, 0, 2 * Math.PI)
     this.context.fill()
   }
 }

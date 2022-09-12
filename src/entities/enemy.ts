@@ -29,7 +29,6 @@ export class Enemy extends ShipSprite {
     this.targetPos = this.target ? { x: this.target.x, y: this.target.y } : null
     this.angle = 0
     this.exhaustTimer = 0
-    // TODO: set a random duration for each enemy, when the duration is reached, stop updating targetPos, sleep for a random duration. then wake up
   }
 
   move(target) {
