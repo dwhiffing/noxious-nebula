@@ -1,5 +1,11 @@
 export const UPGRADES = [
   {
+    description: (n: number) => `Repair`,
+    key: 'repair',
+    label: 'Repair',
+    cost: [],
+  },
+  {
     description: (n: number) => `Lay more mines at once`,
     key: 'mine_count',
     label: 'More mines',
@@ -31,33 +37,15 @@ export const UPGRADES = [
     cost: [100],
   },
   {
-    description: (n: number) => `More health`,
-    key: 'health_max',
-    label: 'More HP',
-    cost: [],
-  },
-  {
-    description: (n: number) => `More shield`,
-    key: 'shield_max',
-    label: 'More shield',
-    cost: [],
-  },
-  {
-    description: (n: number) => `Gain shield faster`,
-    key: 'shield_speed',
-    label: 'Faster shield',
-    cost: [],
-  },
-  {
-    description: (n: number) => `Description`,
-    key: 'shield_absorb',
-    label: 'Absorb',
-    cost: [],
-  },
-  {
     description: (n: number) => `Description`,
     key: 'bullet_count',
     label: 'More bullets',
+    cost: [],
+  },
+  {
+    description: (n: number) => `Shield`,
+    key: 'shield',
+    label: 'More shield',
     cost: [],
   },
 ]

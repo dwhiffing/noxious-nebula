@@ -11,10 +11,7 @@ interface PlayerUpgrades {
   mine_speed?: number
   charge_speed?: number
   charge_max?: number
-  health_max?: number
-  shield_max?: number
-  shield_speed?: number
-  shield_absorb?: number
+  shield?: number
   bullet_count?: number
 }
 

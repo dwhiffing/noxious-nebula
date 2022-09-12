@@ -58,7 +58,7 @@ export const GameScene = ({ canvas, onWin, onLose }) => {
         playSound('playerWin')
         store.setActive(true)
         bullets.pool.clear()
-      }, 1500)
+      }, 1000)
     }, 500)
   }
 

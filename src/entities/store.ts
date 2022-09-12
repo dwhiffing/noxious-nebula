@@ -20,7 +20,7 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
     y: 90,
     text: '',
     color: 'rgba(255,255,255,1)',
-    font: '32px sans-serif',
+    font: '24px sans-serif',
     anchor: { x: 0.5, y: 0.5 },
   })
   buttons.push(moneyText)
@@ -30,14 +30,14 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
     y: 90,
     text: '',
     color: 'rgba(255,255,255,0)',
-    font: '32px sans-serif',
+    font: '24px sans-serif',
     anchor: { x: 0.5, y: 0.5 },
   })
   buttons.push(costText)
 
   const descriptionText = Text({
     x: canvas.width / 2,
-    y: 120,
+    y: 140,
     text: 'a description',
     color: 'rgba(255,255,255,0)',
     font: '16px sans-serif',
@@ -53,19 +53,20 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
     font: '32px sans-serif',
     anchor: { x: 0.5, y: 0.5 },
     onDown() {
-      this.color = 'rgba(255,255,255,0'
-      playSound('click')
-      buttons.forEach((b) => {
-        if (b.isLabel) b.color = 'white'
-      })
       if (typeof selected?.upgrade.key === 'string') {
+        let player = getPlayer()
+        const cost = Number(costText.text.replace('Cost: $', ''))
+        if (player.sprite.money < cost) {
+          playSound('mineNotPlaced')
+          return
+        }
+
         onPurchase(selected.upgrade)
         const upgrades = getPlayer().upgrades
         selected.count.text = upgrades[selected.upgrade.key]
 
-        let player = getPlayer()
-        player.sprite.money -= Number(costText.text.replace('$', ''))
-        moneyText.text = `$${player.sprite.money}`
+        player.sprite.money -= cost
+        moneyText.text = `Cash: $${player.sprite.money}`
 
         if (
           !UPGRADES.find((u) => u.key === selected.upgrade.key).cost[
@@ -79,6 +80,11 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
         }
       }
       selected = null
+      playSound('click')
+      buttons.forEach((b) => {
+        if (b.isLabel && b.color === '#ee9') b.color = 'white'
+      })
+      this.color = 'rgba(255,255,255,0)'
     },
   })
   track(purchase)
@@ -105,20 +111,21 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
   const upgrades = getPlayer().upgrades
 
   UPGRADES.forEach((upgrade, i) => {
-    const x = canvas.width / 2 - 200 + 100 * (i % 5)
-    const y = i >= 5 ? 350 : 250
+    const x = canvas.width / 2 - 150 + 100 * (i % 4)
+    const y = i >= 4 ? 350 : 250
     const onDown = () => {
       const upgrades = getPlayer().upgrades
       const key = upgrade.key
       if (!upgrade.cost[upgrades[key]]) return
       playSound('click')
       buttons.forEach((b) => {
-        if (b.isLabel && b.color === 'red') b.color = 'white'
+        if (b.isLabel && b.color === '#ee9') b.color = 'white'
       })
       purchase.color = 'white'
       selected = { upgrade, count, label }
-      label.color = 'red'
-      costText.text = `$${upgrade.cost[upgrades[key]]}`
+      label.color = '#ee9'
+      count.color = '#ee9'
+      costText.text = `Cost: $${upgrade.cost[upgrades[key]]}`
       costText.color = `rgba(255,255,255,1)`
       descriptionText.text = `${upgrade.description(upgrades[key])}`
       descriptionText.color = 'rgba(255,255,255,1)'
@@ -135,6 +142,7 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
       color: `rgba(255,255,255,${alpha})`,
       font: '24px sans-serif',
       anchor: { x: 0.5, y: 0.5 },
+      isLabel: true,
       onDown,
     })
     buttons.push(count)
@@ -149,6 +157,7 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
       isLabel: true,
     })
     track(label)
+    track(count)
     buttons.push(label)
   })
 
@@ -163,7 +172,7 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
     setActive(_active) {
       active = _active
       if (active) document.exitPointerLock()
-      moneyText.text = `$${getPlayer().sprite.money}`
+      moneyText.text = `Cash: $${getPlayer().sprite.money}`
     },
     render() {
       if (!active) return
