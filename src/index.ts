@@ -6,11 +6,23 @@ import './zzfx'
 const { canvas } = init()
 
 initPointer()
-
 let scene
-
 //@ts-ignore
-zzfxP(...zzfxM(...MUSIC))
+let musicNode = zzfxP(...zzfxM(...MUSIC))
+//@ts-ignore
+musicNode.loop = true
+
+let a = document.getElementsByTagName('a')[0]
+a.addEventListener('click', (e) => {
+  //@ts-ignore
+  e.target.innerHTML = e.target.innerHTML === 'mute' ? 'unmute' : 'mute'
+  //@ts-ignore
+  musicNode.playbackRate.value = musicNode.playbackRate.value === 1 ? 0 : 1
+  //@ts-ignore
+  window.zzfxV = window.zzfxV === 0 ? 0.3 : 0
+})
+// // TODO: remove me
+// a.click()
 
 const startHelp = () => {
   scene && scene.shutdown()
