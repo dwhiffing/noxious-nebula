@@ -12,7 +12,7 @@ export const Enemies = ({ canvas, particles, bullets, pickups }) => {
     getRemaining() {
       return toSpawn + pool.getAliveObjects().length
     },
-    spawn(target, wave) {
+    spawn(target, wave, delay = 0) {
       // TODO: refactor
       let { type = 'homer', count = 1, rate = 0, circular, wall, dir } = wave
       toSpawn += count
@@ -45,24 +45,21 @@ export const Enemies = ({ canvas, particles, bullets, pickups }) => {
             if (dir === 3) y = canvas.height + b
           }
         }
-        requestTimeout(
-          () => {
-            const ttl = Infinity
-            pool.get({
-              x,
-              y,
-              ttl,
-              target,
-              pool,
-              bullets,
-              particles,
-              pickups,
-              type,
-            })
-            toSpawn--
-          },
-          wall ? 0 : i * rate,
-        )
+        requestTimeout(() => {
+          const ttl = Infinity
+          pool.get({
+            x,
+            y,
+            ttl,
+            target,
+            pool,
+            bullets,
+            particles,
+            pickups,
+            type,
+          })
+          toSpawn--
+        }, delay + (wall ? 0 : i * rate))
       }
     },
   }
