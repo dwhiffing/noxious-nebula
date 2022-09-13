@@ -1,6 +1,6 @@
 export const UPGRADES = [
   {
-    description: (n: number) => `Repair`,
+    description: (n: number) => `Repair your ship to full`,
     key: 'repair',
     label: 'Repair',
     cost: [],

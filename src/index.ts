@@ -31,7 +31,7 @@ const startHelp = () => {
     canvas,
     heading: 'How to play',
     texts: [
-      'A rogue AI has sent an army to\nplunder your homeworld for resources.\n\nYou are one of the few survivors,\nProtect it at all costs!',
+      'Your greatest foe has sent an army to\ndestroy your homeworld for resources.\n\nYou are one of the few survivors,\nProtect it at all costs!',
       'Mouse controls your ship.\n\nClick to drop mines or hold to charge energy.\n\nRelease while moving to fire blasts\nor while still for a burst',
       "You can only place a few mines at once to start\n\nMines won't explode if you are too close\n\nMines must be placed at least a few feet apart",
       'Red enemies home in and explode\n\nGreen enemies shield themselves and nearby foes from mines, but not energy\n\nYellow enemies absorb blasts, but not mines and bursts',
@@ -73,7 +73,7 @@ const startLose = () => {
   scene = MenuScene({
     canvas,
     heading: 'Game Over',
-    description: 'You sealed the fate of the Noxious Nebula.',
+    description: 'You died and sealed the fate of the Noxious Nebula.',
     button1: startGame,
   })
 }
