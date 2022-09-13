@@ -1,0 +1,12 @@
+NOTES
+
+better levels: early game (0-2 upgrades): waves 1-5
+better levels: mid game (3-4 upgrades): waves 5-10
+better levels: late game (4-8 upgrades): waves 10-15
+better store descriptions
+
+space background that moves with parallax with player
+make enemies bounce off of walls better
+limit number of shields defender can do at once
+shooter: flies to random point, then shoots energy at player, rinse and repeat
+leech: tiny, latches onto player instead of exploding, slows player down
