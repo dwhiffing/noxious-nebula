@@ -40,7 +40,7 @@ export const UPGRADES = [
     description: (n: number) => `Description`,
     key: 'bullet_count',
     label: 'More bullets',
-    cost: [],
+    cost: [100, 100],
   },
   {
     description: (n: number) => `Shield`,

@@ -82,6 +82,12 @@ export const Player = ({
     if (key === 'mine') {
       const mines = bullets.pool.getAliveObjects().filter((b) => b.isMine)
       sprite.shouldPlayChargeSound = false
+      if (upgrades.mine_damage > 0) {
+        //@ts-ignore
+        opts.explodeRadius *= 1.8
+        //@ts-ignore
+        opts.damage *= 1.8
+      }
       if (
         mines.length >= maxMines * (upgrades.mine_count + 1) ||
         mines.some((b) => b.position.distance(sprite) < mineProximity) ||
@@ -95,6 +101,20 @@ export const Player = ({
       sprite.mineDuration = 10
     }
 
+    if (key === 'shot') {
+      if (upgrades.bullet_count === 1) {
+        // @ts-ignore
+        bullets.spawn({ ...opts, angle: opts.angle - 0.15 })
+        // @ts-ignore
+        opts.angle += 0.15
+      }
+      if (upgrades.bullet_count === 2) {
+        // @ts-ignore
+        bullets.spawn({ ...opts, angle: opts.angle - 0.15 })
+        // @ts-ignore
+        bullets.spawn({ ...opts, angle: opts.angle + 0.15 })
+      }
+    }
     const bullet = bullets.spawn(opts)
     if (key === 'blast') {
       playSound('playerBlast')
