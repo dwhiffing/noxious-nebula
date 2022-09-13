@@ -28,7 +28,7 @@ export const Enemies = ({ canvas, particles, bullets, pickups }) => {
               y: canvas.height / 2 - size / 2,
             },
             -Math.PI + ((Math.PI * 2) / count) * i,
-            450,
+            600,
           )
           x = pos.x
           y = pos.y

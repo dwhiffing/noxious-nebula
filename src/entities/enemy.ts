@@ -59,9 +59,9 @@ export class Enemy extends ShipSprite {
     } else {
       const rand = randInt(-100, 100) / 100
       // TODO: should bounce instead of a random new angle if not spawning
-      if (this.x > 740 - this.width) this.angle = Math.PI / -2 + rand
+      if (this.x > 950 - this.width) this.angle = Math.PI / -2 + rand
       if (this.x < 0) this.angle = Math.PI / 2 + rand
-      if (this.y > 540 - this.width) this.angle = 0 + rand
+      if (this.y > 600 - this.width) this.angle = 0 + rand
       if (this.y < 0) this.angle = Math.PI + rand
     }
 

@@ -42,9 +42,11 @@ export const GameScene = ({ canvas, onWin, onLose }) => {
     onPurchase: (upgrade) => player.buyUpgrade(upgrade),
     getPlayer: () => player,
   })
-
+  let interval
   const checkEnd = () => {
-    setTimeout(() => {
+    if (interval) clearInterval(interval)
+
+    interval = setInterval(() => {
       if (
         enemies.getRemaining() > 0 ||
         player.sprite.health <= 0 ||
@@ -52,6 +54,7 @@ export const GameScene = ({ canvas, onWin, onLose }) => {
       )
         return
       endTriggered = true
+      clearInterval(interval)
       requestTimeout(() => {
         let level = LEVELS[levelIndex]
         if (!level) return onWin(player.sprite.money)
@@ -59,7 +62,7 @@ export const GameScene = ({ canvas, onWin, onLose }) => {
         store.setActive(true)
         bullets.pool.clear()
       }, 1000)
-    }, 500)
+    }, 1000)
   }
 
   const playerEnemyCollide = (p, e) => {

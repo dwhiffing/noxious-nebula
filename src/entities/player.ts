@@ -74,7 +74,7 @@ export const Player = ({
     sprite.charge = -2
     sprite.chargeSound?.stop()
     let opts = { x: sprite.x, y: sprite.y, enemies }
-    let key = dur > _dur ? (sprite.speed > 3 ? 'shot' : 'blast') : 'mine'
+    let key = dur > _dur ? (sprite.speed > 2 ? 'shot' : 'blast') : 'mine'
     Object.entries(BULLET_STATS[key]).forEach(([k, v]) => {
       opts[k] = typeof v === 'function' ? v({ dur, sprite }) : v
     })

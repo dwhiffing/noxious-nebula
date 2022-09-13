@@ -9,20 +9,20 @@ export const UPGRADES = [
     description: (n: number) => `Lay more mines at once`,
     key: 'mine_count',
     label: 'More mines',
-    cost: [100, 200],
+    cost: [50, 100],
   },
   {
     description: (n: number) => `Lay mines faster`,
     key: 'mine_speed',
     label: 'Faster mines',
-    cost: [100, 200],
+    cost: [50, 100],
   },
   {
     description: (n: number) =>
       `Mines have larger explosions and do more damage`,
     key: 'mine_damage',
     label: 'Bigger mines',
-    cost: [300],
+    cost: [200],
   },
   {
     description: (n: number) => `Charge energy faster`,
@@ -31,7 +31,8 @@ export const UPGRADES = [
     cost: [250, 500],
   },
   {
-    description: (n: number) => `Charge more energy before max`,
+    description: (n: number) =>
+      `Charge more energy before max, allowing more damage`,
     key: 'charge_max',
     label: 'More charge',
     cost: [300, 600],
@@ -43,9 +44,9 @@ export const UPGRADES = [
     cost: [500],
   },
   {
-    description: (n: number) => `Description`,
+    description: (n: number) => `Fire one extra bullet when you fire a blast`,
     key: 'bullet_count',
-    label: 'More bullets',
+    label: 'Extra Blast',
     cost: [600, 1200],
   },
 ]
