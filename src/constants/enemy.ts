@@ -30,7 +30,7 @@ export const ENEMY_STATS: Record<string, EnemyStats> = {
     health: 10,
     damage: 10,
     separateAmount: 30,
-    value: 10,
+    value: 5,
   },
   big: {
     color: '#f00',
@@ -43,7 +43,7 @@ export const ENEMY_STATS: Record<string, EnemyStats> = {
     health: 40,
     damage: 20,
     separateAmount: 30,
-    value: 10,
+    value: 25,
   },
   defender: {
     color: '#0f0',
@@ -60,7 +60,7 @@ export const ENEMY_STATS: Record<string, EnemyStats> = {
     explodes: false,
     maxTargetDistance: 200,
     minTargetDistance: 100,
-    value: 10,
+    value: 25,
   },
   absorber: {
     color: '#ff0',
@@ -76,7 +76,7 @@ export const ENEMY_STATS: Record<string, EnemyStats> = {
     explodes: false,
     maxTargetDistance: 100,
     minTargetDistance: 60,
-    value: 10,
+    value: 25,
   },
   spike: {
     color: '#444',
@@ -89,6 +89,6 @@ export const ENEMY_STATS: Record<string, EnemyStats> = {
     collides: true,
     exhaust: false,
     explodes: false,
-    value: 10,
+    value: 25,
   },
 }
