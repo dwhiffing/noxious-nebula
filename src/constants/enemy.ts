@@ -21,11 +21,11 @@ interface EnemyStats {
 export const ENEMY_STATS: Record<string, EnemyStats> = {
   homer: {
     color: '#f00',
-    size: 20,
+    size: 15,
     exhaust: true,
     explodes: true,
-    maxSpeed: 3.8,
-    speed: 0.8,
+    maxSpeed: 4.2,
+    speed: 1,
     turnRate: 0.08,
     health: 10,
     damage: 10,
