@@ -23,6 +23,7 @@ export const Player = ({
   bullets,
   getStoreActive,
   enemies,
+  checkEnd,
 }) => {
   const {
     speed,
@@ -124,6 +125,7 @@ export const Player = ({
           .getAliveObjects()
           .filter((e) => distance(e, bullet) < bullet.explodeRadius)
           .forEach((e: any) => {
+            checkEnd()
             e.takeDamage(bullet.damage)
           })
       }, 50)

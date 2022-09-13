@@ -34,6 +34,7 @@ export const GameScene = ({ canvas, onWin, onLose }) => {
     y,
     bullets,
     getStoreActive: () => store.getActive(),
+    checkEnd: () => checkEnd(),
     enemies,
   })
   let store = Store({
