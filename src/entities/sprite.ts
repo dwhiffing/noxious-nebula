@@ -98,14 +98,14 @@ export class ShipSprite extends Sprite {
 
     // energy
     if (this.type === 'defender') {
-      this.shield = 100
+      this.shield = this.maxShield || 100
     }
     if (this.shield > 0) {
       this.context.beginPath()
       this.context.lineWidth = 3
-      this.context.strokeStyle = `rgba(0,200,0,${this.shield / 100})`
-      this.context.arc(o, o, w + 6, getRads(-90), getRads(360 - 90))
-      this.context.closePath()
+      this.context.strokeStyle = `rgba(0,200,0,1)`
+      const f2 = 360 * (this.shield / this.maxShield || 100)
+      this.context.arc(o, o, w + 6, getRads(-90), getRads(f2 - 90))
       this.context.stroke()
     }
 

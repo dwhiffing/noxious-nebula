@@ -34,6 +34,7 @@ export const Player = ({
     mineRate,
     health,
     shield,
+    maxShield,
     shieldChargeRate,
   } = PLAYER_STATS
   let sprite = new ShipSprite({
@@ -48,6 +49,7 @@ export const Player = ({
     maxCharge,
     mineDuration: 0,
     shield: shield,
+    maxShield,
   })
   const upgrades: PlayerUpgrades = {}
   UPGRADES.forEach((u) => {
@@ -155,6 +157,8 @@ export const Player = ({
       upgrades[upgrade.key] += 1
       console.log(upgrades)
       sprite.maxCharge = maxCharge * (upgrades.charge_max + 1)
+      sprite.maxShield = upgrades.shield * 100
+      sprite.shield = sprite.maxShield
     },
     update() {
       sprite.update()
@@ -165,7 +169,7 @@ export const Player = ({
         sprite.y = canvas.height - size / 2
       sprite.dx *= 0.7
       sprite.dy *= 0.7
-      if (sprite.shield > 0) sprite.shield += shieldChargeRate
+      if (sprite.shield < sprite.maxShield) sprite.shield += shieldChargeRate
       if (isDown) {
         if (sprite.charge < sprite.maxCharge) {
           sprite.charge += chargeRate * (upgrades.charge_speed + 1)

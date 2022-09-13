@@ -170,7 +170,8 @@ export class Enemy extends ShipSprite {
 
     if (this.type === 'defender') {
       this.getNearbyEnemies().forEach((n) => {
-        if (!n.shield || n.shield < 100) n.shield = 100
+        let max = n.maxShield || 100
+        if (!n.shield || n.shield < max) n.shield = max
       })
     }
     if (this.shield > 0) this.shield -= 1

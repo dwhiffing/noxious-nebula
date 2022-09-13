@@ -9,5 +9,6 @@ export const PLAYER_STATS = {
   mineRate: 0.2,
   health: 100,
   shield: 0,
+  maxShield: 0,
   shieldChargeRate: 0.1,
 }

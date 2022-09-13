@@ -46,6 +46,6 @@ export const UPGRADES = [
     description: (n: number) => `Shield`,
     key: 'shield',
     label: 'More shield',
-    cost: [],
+    cost: [100],
   },
 ]
