@@ -91,6 +91,11 @@ export const GameScene = ({ canvas, onWin, onLose }) => {
     b.die()
     playSound('playerHit')
     p.takeDamage(b.damage)
+
+    if (!p.isAlive()) {
+      playSound('playerDie')
+      onLose()
+    }
   }
   const bulletEnemyCollide = (b, e) => {
     if (b.triggered || b.isEnemyBullet) return
