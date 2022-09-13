@@ -1,13 +1,16 @@
 {
-  "name": "js13k-2022",
+  "name": "noxious-nebula",
   "version": "1.0.0",
   "author": "Daniel Whiffing <danielwhiffing@gmail.com>",
   "license": "MIT",
+  "homepage": "https://dwhiffing.github.io/noxious-nebula",
   "scripts": {
     "dev": "yarn clean; rollup -w -c rollup.config.js",
     "build": "yarn clean; NODE_ENV=production rollup -c rollup.config.js",
     "clean": "rm -rf dist; mkdir dist",
-    "postbuild": "node postbuild.js"
+    "postbuild": "node postbuild.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "kontra": "^8.0.0"
@@ -20,6 +23,7 @@
     "@typescript-eslint/parser": "^3.10.1",
     "archiver": "^5.3.1",
     "esbuild": "^0.15.5",
+    "gh-pages": "^4.0.0",
     "html-minifier": "^4.0.0",
     "prettier": "^2.1.1",
     "rollup": "^2.78.1",
