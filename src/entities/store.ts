@@ -63,7 +63,8 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
 
         onPurchase(selected.upgrade)
         const upgrades = getPlayer().upgrades
-        selected.count.text = upgrades[selected.upgrade.key]
+        if (selected.key !== 'repair')
+          selected.count.text = upgrades[selected.upgrade.key]
 
         player.sprite.money -= cost
         moneyText.text = `Cash: $${player.sprite.money}`
@@ -116,7 +117,9 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
     const onDown = () => {
       const upgrades = getPlayer().upgrades
       const key = upgrade.key
-      if (!upgrade.cost[upgrades[key]]) return
+      let cost = upgrade.cost[upgrades[key]]
+      if (key === 'repair') cost = 100 - getPlayer().sprite.health
+      if (!cost) return
       playSound('click')
       buttons.forEach((b) => {
         if (b.isLabel && b.color === '#ee9') b.color = 'white'
@@ -125,7 +128,7 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
       selected = { upgrade, count, label }
       label.color = '#ee9'
       count.color = '#ee9'
-      costText.text = `Cost: $${upgrade.cost[upgrades[key]]}`
+      costText.text = `Cost: $${cost}`
       costText.color = `rgba(255,255,255,1)`
       descriptionText.text = `${upgrade.description(upgrades[key])}`
       descriptionText.color = 'rgba(255,255,255,1)'
@@ -138,7 +141,7 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
     const count = Text({
       x,
       y: y - 30,
-      text: upgrades[upgrade.key]?.toString(),
+      text: upgrade.key === 'repair' ? '-' : upgrades[upgrade.key]?.toString(),
       color: `rgba(255,255,255,${alpha})`,
       font: '24px sans-serif',
       anchor: { x: 0.5, y: 0.5 },

@@ -174,8 +174,11 @@ export const Player = ({
     sprite,
     upgrades,
     buyUpgrade(upgrade) {
+      if (upgrade.key === 'repair') {
+        sprite.health = 100
+        return
+      }
       upgrades[upgrade.key] += 1
-      console.log(upgrades)
       sprite.maxCharge = maxCharge * (upgrades.charge_max + 1)
       sprite.maxShield = upgrades.shield * 100
       sprite.shield = sprite.maxShield

@@ -54,6 +54,7 @@ export class ShipSprite extends Sprite {
   draw() {
     this.strobeTimer--
     const w = this.width * 0.6
+    const w2 = this.innerSize || w / 2
     const o = this.width / 2
 
     // base circle
@@ -81,7 +82,7 @@ export class ShipSprite extends Sprite {
     this.context.strokeStyle = '#555'
     this.context.fillStyle = '#111'
     this.context.beginPath()
-    this.context.arc(o, o, w / 2, 0, 2 * Math.PI)
+    this.context.arc(o, o, w2, 0, 2 * Math.PI)
     this.context.closePath()
     this.context.stroke()
     this.context.fill()

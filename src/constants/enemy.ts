@@ -12,6 +12,7 @@ interface EnemyStats {
   spikey?: boolean
   maxSpeed?: number
   friction?: number
+  innerSize?: number
   value?: number
   maxTargetDistance?: number
   minTargetDistance?: number
