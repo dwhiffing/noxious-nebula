@@ -199,6 +199,7 @@ export class Enemy extends ShipSprite {
       x: this.x + size / 2,
       y: this.y + size / 2,
       value: this.value,
+      target: this.target,
     })
     // draw explosion
     this.particles.spawn({

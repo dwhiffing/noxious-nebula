@@ -1,11 +1,11 @@
-import { Pool, SpriteClass } from 'kontra'
+import { angleToTarget, movePoint, Pool, SpriteClass } from 'kontra'
 
 export const Pickups = ({ canvas }) => {
   const pool = Pool({ create: () => new Pickup() })
   return {
     pool,
-    spawn({ x, y, value }) {
-      pool.get({ x, y, value, ttl: 400 })
+    spawn({ x, y, value, target }) {
+      pool.get({ x, y, value, ttl: 400, target })
     },
   }
 }
@@ -22,6 +22,24 @@ class Pickup extends SpriteClass {
 
   die() {
     this.ttl = 0
+  }
+
+  update(props) {
+    super.update(props)
+    if (this.opacity > 0) {
+      if (this.position.distance(this.target.position) < 50) {
+        const pos = movePoint(
+          this.position,
+          angleToTarget(this, this.target),
+          0.5,
+        )
+        this.dx = pos.x - this.position.x
+        this.dy = pos.y - this.position.y
+      } else {
+        this.dx = 0
+        this.dy = 0
+      }
+    }
   }
 
   draw() {
