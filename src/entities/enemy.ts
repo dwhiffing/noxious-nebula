@@ -160,6 +160,7 @@ export class Enemy extends ShipSprite {
           t.type !== 'defender' &&
           t.position.distance(this) < DEFENDER_SHIELD_RANGE,
       )
+      .slice(0, 1)
   }
 
   update() {
