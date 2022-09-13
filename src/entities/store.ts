@@ -133,11 +133,12 @@ export const Store = ({ canvas, onPurchase, onNext, getPlayer }) => {
       descriptionText.text = `${upgrade.description(upgrades[key])}`
       descriptionText.color = 'rgba(255,255,255,1)'
     }
-    const alpha = UPGRADES.find((u) => u.key === upgrade.key)?.cost[
-      upgrades[upgrade.key]
-    ]
-      ? 1
-      : 0.5
+    const alpha =
+      UPGRADES.find((u) => u.key === upgrade.key)?.cost[
+        upgrades[upgrade.key]
+      ] || upgrade.key === 'repair'
+        ? 1
+        : 0.5
     const count = Text({
       x,
       y: y - 30,
